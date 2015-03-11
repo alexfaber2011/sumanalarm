@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/set_alarm_button"
+        android:title="@string/set_alarm">
+    </item>
+    <item
+        android:id="@+id/challenges_button"
+        android:title="@string/title_activity_challenges">
+    </item>
+    <item
+        android:id="@+id/settings_button"
+        android:title="@string/title_activity_settings">
+    </item>
+</menu>
