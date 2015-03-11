@@ -1,5 +1,6 @@
 package com.example.alexfaber.sumanalarm;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -28,9 +29,18 @@ public class MainActivity extends ActionBarActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case android.R.id.home: return(true);
-            case R.id.settings_button: return(true);
-            case R.id.challenges_button: return(true);
+            case R.id.set_alarm_button:
+                Intent intent = new Intent(this, MainActivity.class);
+                startActivity(intent);
+                return(true);
+            case R.id.settings_button:
+                intent = new Intent(this, Settings.class);
+                startActivity(intent);
+                return(true);
+            case R.id.challenges_button:
+                intent = new Intent(this, Challenges.class);
+                startActivity(intent);
+                return(true);
         }
         return(super.onOptionsItemSelected(item));
     }
