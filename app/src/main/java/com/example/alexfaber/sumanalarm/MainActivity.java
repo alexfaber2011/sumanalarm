@@ -3,16 +3,23 @@ package com.example.alexfaber.sumanalarm;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.TimePicker;
+import android.widget.TimePicker.OnTimeChangedListener;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements OnTimeChangedListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        TimePicker picker = (TimePicker)findViewById(R.id.picker);
+        picker.setOnTimeChangedListener(this);
     }
 
 
@@ -46,5 +53,13 @@ public class MainActivity extends ActionBarActivity {
                 return(true);
         }
         return(super.onOptionsItemSelected(item));
+    }
+
+
+    @Override
+    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+        Log.d("onTimeChanged", "Time Changed");
+        Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
+        confirmButton.setText(R.string.confirm_alarm + " " + hourOfDay + ":" + minute);
     }
 }

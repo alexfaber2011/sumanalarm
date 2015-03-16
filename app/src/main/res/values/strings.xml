@@ -10,4 +10,6 @@
     <!--action bar-->
     <string name="set_alarm">Set Alarm</string>
 
+    <!--Set Alarm Activity-->
+    <string name="confirm_alarm">Confirm Alarm: </string>
 </resources>
