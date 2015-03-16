@@ -31,14 +31,17 @@ public class MainActivity extends ActionBarActivity {
         switch (item.getItemId()) {
             case R.id.set_alarm_button:
                 Intent intent = new Intent(this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
             case R.id.settings_button:
                 intent = new Intent(this, Settings.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
             case R.id.challenges_button:
                 intent = new Intent(this, Challenges.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
         }
