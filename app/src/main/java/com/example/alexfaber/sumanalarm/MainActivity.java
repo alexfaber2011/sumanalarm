@@ -8,10 +8,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TimePicker;
-import android.widget.TimePicker.OnTimeChangedListener;
 
 
-public class MainActivity extends ActionBarActivity implements OnTimeChangedListener {
+public class MainActivity extends ActionBarActivity{
+
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +20,11 @@ public class MainActivity extends ActionBarActivity implements OnTimeChangedList
         setContentView(R.layout.activity_main);
 
         TimePicker picker = (TimePicker)findViewById(R.id.picker);
-        picker.setOnTimeChangedListener(this);
+        picker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                Log.v(TAG, "CHANGED!");
+            }
+        });
     }
 
 
@@ -56,10 +61,10 @@ public class MainActivity extends ActionBarActivity implements OnTimeChangedList
     }
 
 
-    @Override
-    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-        Log.d("onTimeChanged", "Time Changed");
-        Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
-        confirmButton.setText(R.string.confirm_alarm + " " + hourOfDay + ":" + minute);
-    }
+//    @Override
+//    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+//        Log.v(TAG, "Time Changed");
+//        Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
+//        confirmButton.setText(R.string.confirm_alarm + " " + hourOfDay + ":" + minute);
+//    }
 }
