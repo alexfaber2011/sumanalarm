@@ -6,25 +6,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TimePicker;
 
 
-public class MainActivity extends ActionBarActivity{
+public class MainActivity extends ActionBarActivity implements View.OnClickListener{
 
     private static final String TAG = "MainActivity";
+    TimePicker picker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TimePicker picker = (TimePicker)findViewById(R.id.picker);
-        picker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                Log.v(TAG, "CHANGED!");
-            }
-        });
+        Log.v(TAG, "CREATED");
+        picker = (TimePicker)findViewById(R.id.picker);
+
+        Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
+        confirmButton.setOnClickListener(this);
     }
 
 
@@ -60,11 +61,14 @@ public class MainActivity extends ActionBarActivity{
         return(super.onOptionsItemSelected(item));
     }
 
-
-//    @Override
-//    public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-//        Log.v(TAG, "Time Changed");
-//        Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
-//        confirmButton.setText(R.string.confirm_alarm + " " + hourOfDay + ":" + minute);
-//    }
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case  R.id.confirm_alarm: {
+                Integer minute = picker.getCurrentMinute();
+                Integer hour = picker.getCurrentHour();
+                break;
+            }
+        }
+    }
 }
