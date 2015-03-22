@@ -1,4 +1,4 @@
-package com.example.alexfaber.sumanalarm;
+package com.example.alexfaber.sumanalarm.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.alexfaber.sumanalarm.R;
 
-public class Challenges extends ActionBarActivity {
+
+public class Settings extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_challenges);
+        setContentView(R.layout.activity_settings);
     }
 
 
