@@ -81,7 +81,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case  R.id.confirm_alarm: {
                 Integer minute = picker.getCurrentMinute();
                 Integer hour = picker.getCurrentHour();
-                Toast.makeText(this, "Current hour: " + hour + ", Current minute: " + minute,
+                Toast.makeText(this, "Current hour: " + hour + " - Current minute: " + minute,
                         Toast.LENGTH_SHORT).show();
 
                 long alarmTime = System.currentTimeMillis()
