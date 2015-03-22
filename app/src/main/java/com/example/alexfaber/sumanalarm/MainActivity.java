@@ -40,22 +40,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
         Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
         confirmButton.setOnClickListener(this);
-
-        Intent intent2 = new Intent(getBaseContext(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                getBaseContext(), 0, intent2, 0);
-        Log.v("test", "In onCreate - Date before: " + Long.toString(System.currentTimeMillis()));
-        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + (2 * 1000),
-                pendingIntent);
-
-//        WORKING!!
-//        Intent intent2 = new Intent(this, AlarmReceiver.class);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 1, intent2, 0);
-//        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-//                + (i * 1000), pendingIntent);
-
     }
 
 
@@ -97,34 +81,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
             case  R.id.confirm_alarm: {
                 Integer minute = picker.getCurrentMinute();
                 Integer hour = picker.getCurrentHour();
-                long millisecond = Calendar.getInstance().getTimeInMillis();
-//                Log.v("test", "Date: " + Long.toString(millisecond));
-//                Intent intent = new Intent(v.getContext(), MyWakefulService.class);
-//                startService(intent);
-////                bindService(intent, new ServiceConnection() {
-////                    @Override
-////                    public void onServiceConnected(ComponentName name, IBinder service) {
-////
-////                    }
-////
-////                    @Override
-////                    public void onServiceDisconnected(ComponentName name) {
-////
-////                    }
-////
-////                }, BIND_AUTO_CREATE);
-//
-////                PendingIntent alarmIntent = PendingIntent.getBroadcast(this, 1, intent, PendingIntent.FLAG_NO_CREATE);
-//
-//                Log.v("test", "Date before: " + Long.toString(System.currentTimeMillis()));
-//
-//                AlarmManager alarmMgr = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-//                PendingIntent alarmIntent = PendingIntent.getBroadcast(v.getContext(), 0, intent, 0);
-//
-//                alarmMgr.setExact(AlarmManager.RTC_WAKEUP,
-//                        System.currentTimeMillis() +
-//                                5 * 1000, alarmIntent);
-//
+                Toast.makeText(this, "Current hour: " + hour + ", Current minute: " + minute,
+                        Toast.LENGTH_SHORT).show();
 
                 long alarmTime = System.currentTimeMillis()
                         + (2 * 1000);
@@ -133,19 +91,8 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
                 Toast.makeText(this, "Alarm set in " + 2 + " seconds",
-                        Toast.LENGTH_LONG).show();
-                Log.v("test", "Alarm Date after: " + Long.toString(System.currentTimeMillis()));
-
-                Log.v("test", "Date after: " + Long.toString(Calendar.getInstance().getTimeInMillis()));
-//
-//                Intent intent2 = new Intent(this, MyWakefulService.class);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(
-//                        this.getApplicationContext(), 234324243, intent2, 0);
-//                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-//                alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()
-//                        + (5 * 1000), pendingIntent);
-//                Toast.makeText(this, "Alarm set in " + 5 + " seconds",
-//                        Toast.LENGTH_LONG).show();
+                        Toast.LENGTH_SHORT).show();
+                Log.v("test", "Set alarm at: " + Long.toString(System.currentTimeMillis()));
 
                 break;
             }
