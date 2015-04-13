@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:text="Snooze"
             android:id="@+id/button"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:onClick="setSnooze" />
     </FrameLayout>
 </RelativeLayout>
