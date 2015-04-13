@@ -64,8 +64,6 @@ public class AlarmActivity extends ActionBarActivity{
         if (alarmTone.isPlaying())
             toggleAlarmSound();
 
-        finish();
-
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         Alarm.getAlarm().setSnooze(this);
         startActivity(mainActivityIntent);
@@ -79,8 +77,6 @@ public class AlarmActivity extends ActionBarActivity{
 
         Button button = (Button) findViewById(R.id.toggleButton);
         button.setEnabled(false);
-
-        finish();
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         startActivity(mainActivityIntent);
