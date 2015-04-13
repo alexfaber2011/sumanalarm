@@ -6,6 +6,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -47,11 +48,28 @@ public class AlarmActivity extends ActionBarActivity{
             alarmTone.play();
     }
 
+    public void setSnooze(View view)
+    {
+        Log.v("AlarmActivity", "setSnooze() called at: " + System.currentTimeMillis());
+//        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+//        startActivity(mainActivityIntent);
+
+        toggleAlarmSound();
+
+//        getBaseContext()
+//                MainActivity.
+
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        startActivity(mainActivityIntent);
+    }
+
     public void toggleAlarm(View view)
     {
         toggleAlarmSound();
         Button button = (Button) findViewById(R.id.toggleButton);
         button.setEnabled(false);
+
+        finish();
 
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         startActivity(mainActivityIntent);

@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.alexfaber.sumanalarm.Alarm;
 import com.example.alexfaber.sumanalarm.AlarmReceiver;
 import com.example.alexfaber.sumanalarm.R;
 
@@ -82,32 +83,41 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Integer minutes = picker.getCurrentMinute();
                 Integer hours = picker.getCurrentHour();
 
-                if (!inTheFuture(hours, minutes))
-                {
-                    Toast.makeText(this, "Alarm is set to a time in the past, please pick a time in the future.",
-                            Toast.LENGTH_LONG).show();
-                    break;
-                }
+                Alarm alarm = new Alarm(this);
 
-                long alarmTime = getAlarmTimeInMilliseconds(hours, minutes);
-
-                Intent intent = new Intent(this, AlarmReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
-
-                // TODO: Pretty print the alarm time from now
-                long difference = alarmTime - System.currentTimeMillis();
-
-                String timeFromNow = prettyPrintTimeDifference(difference);
-
-                Toast.makeText(this, "Alarm is set to go off " + timeFromNow + "from now",
-                        Toast.LENGTH_SHORT).show();
-                Log.v("test", "Set alarm at: " + Long.toString(System.currentTimeMillis()));
+                alarm.setAlarmAtTime(minutes, hours);
+//                setAlarmAtTime(minutes, hours);
 
                 break;
             }
         }
+    }
+
+    public void setAlarmAtTime(Integer minutes, Integer hours)
+    {
+        if (!inTheFuture(hours, minutes))
+        {
+            Toast.makeText(this, "Alarm is set to a time in the past, please pick a time in the future.",
+                    Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        long alarmTime = getAlarmTimeInMilliseconds(hours, minutes);
+
+        Intent intent = new Intent(this, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+
+        // TODO: Pretty print the alarm time from now
+        long difference = alarmTime - System.currentTimeMillis();
+
+        String timeFromNow = prettyPrintTimeDifference(difference);
+
+        Toast.makeText(this, "Alarm is set to go off " + timeFromNow + "from now",
+                Toast.LENGTH_SHORT).show();
+        Log.v("test", "Set alarm at: " + Long.toString(System.currentTimeMillis()));
+
     }
 
     private long getAlarmTimeInMilliseconds(int hours, int minutes)
