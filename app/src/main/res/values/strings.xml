@@ -7,15 +7,17 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_alarm">Alarm</string>
     <string name="title_activity_challenges">Challenges</string>
+    <string name="title_activity_create_challenge">Create Challenge</string>
 
     <!-- action bar -->
     <string name="set_alarm">Set Alarm</string>
 
     <!-- Set Alarm Activity -->
     <string name="confirm_alarm">Confirm Alarm: </string>
-    <string name="title_activity_create_challenge">Create Challenge</string>
 
     <!-- Challenge Activity -->
     <string name="create_challenge">Create Challenge</string>
 
+    <!--Create Challenge Activity-->
+    <string name="add_username">Add Username</string>
 </resources>
