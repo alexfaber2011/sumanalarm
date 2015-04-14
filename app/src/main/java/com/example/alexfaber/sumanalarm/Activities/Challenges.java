@@ -3,18 +3,24 @@ package com.example.alexfaber.sumanalarm.Activities;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 import com.example.alexfaber.sumanalarm.R;
 
 
-public class Challenges extends ActionBarActivity {
+public class Challenges extends ActionBarActivity implements View.OnClickListener{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenges);
+
+        Button confirmButton = (Button)findViewById(R.id.create_challenge);
+        confirmButton.setOnClickListener(this);
     }
 
 
@@ -48,5 +54,15 @@ public class Challenges extends ActionBarActivity {
                 return(true);
         }
         return(super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.create_challenge: {
+                Intent intent = new Intent(this, CreateChallenge.class);
+                startActivity(intent);
+            }
+        }
     }
 }

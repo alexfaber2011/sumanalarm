@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.alexfaber.sumanalarm" >
 
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -24,7 +28,6 @@
             android:name=".Activities.Challenges"
             android:label="@string/title_activity_challenges" >
         </activity>
-
         <activity
             android:name=".Activities.AlarmActivity"
             android:label="@string/title_activity_alarm" >
@@ -32,7 +35,7 @@
 
         <service
             android:name=".MyWakefulService"
-            android:label="MyWakefulService">
+            android:label="MyWakefulService" >
             android:enabled="true"
             <intent-filter>
                 <action android:name="android.intent.action.MYWAKEFULSERVICE" />
@@ -42,10 +45,10 @@
         <receiver android:name=".AlarmReceiver" >
         </receiver>
 
+        <activity
+            android:name=".Activities.CreateChallenge"
+            android:label="@string/title_activity_create_challenge" >
+        </activity>
     </application>
-
-    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
 </manifest>

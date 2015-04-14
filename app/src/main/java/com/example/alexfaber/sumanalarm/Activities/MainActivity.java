@@ -77,6 +77,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        Log.v("onClick", "clicked!");
         switch (v.getId()) {
             case  R.id.confirm_alarm: {
                 Integer minutes = picker.getCurrentMinute();
