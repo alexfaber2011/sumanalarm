@@ -16,12 +16,15 @@ tools:context="com.example.alexfaber.sumanalarm.Activities.CreateChallenge">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/add_username_text"
+        android:inputType="text"
+        android:imeOptions="actionSend"
         android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/add_username_button"/>
+        android:id="@+id/add_username_button"
+        android:text="@string/add_username"/>
 
     <ListView
         android:layout_width="match_parent"

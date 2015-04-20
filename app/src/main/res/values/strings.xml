@@ -19,5 +19,5 @@
     <string name="create_challenge">Create Challenge</string>
 
     <!--Create Challenge Activity-->
-    <string name="add_username">Add Username</string>
+    <string name="add_username">Add</string>
 </resources>
