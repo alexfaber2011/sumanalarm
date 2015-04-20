@@ -21,8 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Backend {
-    private static final String TAG = "ConnectionManager";
-    private static final String SERVER_URL = "http://manflowyoga.herokuapp.com/";
+    private static final String TAG = "Backend";
+    private static final String SERVER_URL = "http://104.236.94.200:5555/";
 
     public interface BackendCallback {
         public void onRequestCompleted(Object result);
@@ -47,6 +47,48 @@ public class Backend {
         }
 
         return errorMessage;
+    }
+
+    public static void createChallenge(String userId, String[] userNames, final BackendCallback callback){
+        AsyncHttpClient client = new AsyncHttpClient(SERVER_URL);
+        StringEntity jsonParams = null;
+
+        try{
+            JSONObject json = new JSONObject();
+            json.put("owner", userId);
+            json.put("userNames", userNames);
+            jsonParams = new StringEntity(json.toString());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        List<Header> headers = new ArrayList<Header>();
+        headers.add(new BasicHeader("Accept", "application/json"));
+        headers.add(new BasicHeader("Content-Type", "application/json"));
+
+        client.post("challenges/", jsonParams, headers, new JsonResponseHandler() {
+            @Override
+            public void onSuccess() {
+                JsonObject result = getContent().getAsJsonObject();
+
+                Log.v(TAG, result.toString());
+
+                //Start creating some challenge shit.
+                Gson gson = new GsonBuilder().create();
+                Challenge challenge = gson.fromJson(result, Challenge.class);
+
+                Log.v(TAG, challenge.toString());
+                callback.onRequestCompleted(challenge);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error){
+                Log.v(TAG, "statusCode: " + statusCode);
+                Log.v(TAG, "headers: " + headers.toString());
+                Log.v(TAG, "statusCode: " + responseBody.toString());
+                Log.v(TAG, "statusCode: " + error.toString());
+            }
+        });
     }
 
 }

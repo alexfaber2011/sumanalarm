@@ -16,6 +16,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alexfaber.sumanalarm.Models.Backend;
+import com.example.alexfaber.sumanalarm.Models.Challenge;
 import com.example.alexfaber.sumanalarm.R;
 import com.example.alexfaber.sumanalarm.UserNameListviewHelper;
 
@@ -24,11 +26,12 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
     private UserNameListviewHelper userNameListViewHelper;
     private String TAG = "CreateChallenge";
     private ListView userNameListView;
+    private ArrayAdapter<String> userNamesAdapter;
 
     //Private methods
 
     private void updateListView(){
-        ArrayAdapter<String> userNamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, userNameListViewHelper.getUserNames());
+        this.userNamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, userNameListViewHelper.getUserNames());
         this.userNameListView.setAdapter(userNamesAdapter);
     }
 
@@ -68,6 +71,8 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
         //Wire up submit button
         Button confirmButton = (Button)findViewById(R.id.add_username_button);
         confirmButton.setOnClickListener(this);
+        Button createChallengeButton = (Button)findViewById(R.id.create_challenge_button);
+        createChallengeButton.setOnClickListener(this);
 
         //Wire up send button on keyboard
         EditText et = (EditText)findViewById(R.id.add_username_text);
@@ -119,6 +124,22 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
             case R.id.add_username_button: {
                 onSubmit();
                 break;
+            }
+            case R.id.create_challenge_button: {
+                Log.v(TAG, "Create Challenge Button Pressed");
+                Backend.createChallenge("55358051ac10a93834970cc3", userNameListViewHelper.getUserNames(), new Backend.BackendCallback() {
+                    @Override
+                    public void onRequestCompleted(Object result) {
+                        Challenge challenge = (Challenge)result;
+                        //TODO send user to a new activity with all the information.
+                        Log.v(TAG, challenge.toString());
+                    }
+
+                    @Override
+                    public void onRequestFailed(String message) {
+                        Log.v(TAG, "Request Failed");
+                    }
+                });
             }
         }
     }

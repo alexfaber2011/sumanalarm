@@ -9,7 +9,7 @@ tools:context="com.example.alexfaber.sumanalarm.Activities.CreateChallenge">
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/add_username"
-        android:id="@+id/add_username_label"
+        android:id="@+id/create_challenge"
         android:layout_gravity="center_horizontal" />
 
     <EditText
@@ -33,5 +33,10 @@ tools:context="com.example.alexfaber.sumanalarm.Activities.CreateChallenge">
         android:id="@+id/userNameListView"
         android:layout_gravity="center_horizontal" />
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/create_challenge_button"
+        android:text="@string/create_challenge"/>
 
 </LinearLayout>
