@@ -1,6 +1,5 @@
 package com.example.alexfaber.sumanalarm.Activities;
 
-import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,21 +8,31 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.R;
-import com.example.alexfaber.sumanalarm.UsernameListViewHelper;
+import com.example.alexfaber.sumanalarm.UserNameListviewHelper;
 
 public class CreateChallenge extends ActionBarActivity implements View.OnClickListener{
     //Instance variables
-    private UsernameListViewHelper usernameListViewHelper;
+    private UserNameListviewHelper userNameListViewHelper;
     private String TAG = "CreateChallenge";
+    private ListView userNameListView;
 
     //Private methods
-    private void respondToAddedUsername(){
+
+    private void updateListView(){
+        ArrayAdapter<String> userNamesAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, userNameListViewHelper.getUserNames());
+        this.userNameListView.setAdapter(userNamesAdapter);
+    }
+
+    private void onSubmit(){
         EditText et = (EditText)findViewById(R.id.add_username_text);
 
         //Check to see if they've actually supplied a username
@@ -34,25 +43,27 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
 
         //Add username to array of usernames
         String username = et.getText().toString();
-        if(!usernameListViewHelper.addUsername(username)){
+        if(!userNameListViewHelper.addUserName(username)){
             Toast.makeText(this, "Username (" + username + ") already added", Toast.LENGTH_LONG).show();
             return;
         }
-
         Toast.makeText(this, "Successfully added " + username, Toast.LENGTH_LONG).show();
+
+        Log.v(TAG, et.getText().toString());
 
         //Clear textView
         et.setText("");
 
         //Show the updated list
-        Log.v(TAG, usernameListViewHelper.getUsernames().toString());
+        Log.v(TAG, userNameListViewHelper.getUserNames().toString());
+        updateListView();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_challenge);
-        this.usernameListViewHelper = new UsernameListViewHelper();
+        this.userNameListViewHelper = new UserNameListviewHelper();
 
         //Wire up submit button
         Button confirmButton = (Button)findViewById(R.id.add_username_button);
@@ -63,15 +74,20 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
         et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                boolean handled = false;
-                if (actionId == EditorInfo.IME_ACTION_SEND) {
-                    respondToAddedUsername();
-                    handled = true;
-                }
-                return handled;
+                onSubmit();
+                return true;
             }
         });
-        //
+
+        //Initialize listView
+        this.userNameListView = (ListView)findViewById(R.id.userNameListView);
+        this.userNameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                userNameListViewHelper.removeUserNameByIndex(position);
+                updateListView();
+            }
+        });
     }
 
 
@@ -101,7 +117,7 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_username_button: {
-                respondToAddedUsername();
+                onSubmit();
                 break;
             }
         }

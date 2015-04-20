@@ -18,6 +18,7 @@ tools:context="com.example.alexfaber.sumanalarm.Activities.CreateChallenge">
         android:id="@+id/add_username_text"
         android:inputType="text"
         android:imeOptions="actionSend"
+        android:imeActionLabel="@string/add_username"
         android:layout_gravity="center_horizontal" />
 
     <Button
@@ -29,7 +30,7 @@ tools:context="com.example.alexfaber.sumanalarm.Activities.CreateChallenge">
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/userNameListView"
         android:layout_gravity="center_horizontal" />
 
 
