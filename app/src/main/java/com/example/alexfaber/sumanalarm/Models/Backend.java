@@ -65,6 +65,7 @@ public class Backend {
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Accept", "application/json"));
         headers.add(new BasicHeader("Content-Type", "application/json"));
+        Log.v(TAG, headers.toString());
 
         client.post("challenges/", jsonParams, headers, new JsonResponseHandler() {
             @Override
@@ -79,14 +80,6 @@ public class Backend {
 
                 Log.v(TAG, challenge.toString());
                 callback.onRequestCompleted(challenge);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error){
-                Log.v(TAG, "statusCode: " + statusCode);
-                Log.v(TAG, "headers: " + headers.toString());
-                Log.v(TAG, "statusCode: " + responseBody.toString());
-                Log.v(TAG, "statusCode: " + error.toString());
             }
         });
     }
