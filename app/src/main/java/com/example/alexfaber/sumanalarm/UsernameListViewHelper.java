@@ -8,11 +8,11 @@ import java.util.Arrays;
 /**
  * Created by alexfaber on 4/14/15.
  */
-public class UserNameListviewHelper {
+public class UserNameListViewHelper {
     private ArrayList<String> userNames;
-    private String TAG = "UserNameListviewHelper";
+    private String TAG = "UserNameListViewHelper";
 
-    public UserNameListviewHelper(){
+    public UserNameListViewHelper(){
         //Constructor, nothing to do here at the moment.
         this.userNames = new ArrayList<String>();
     }
@@ -45,8 +45,20 @@ public class UserNameListviewHelper {
         this.userNames.remove(index);
     }
 
-    public String[] getUserNames(){
-        String[] stockArr = new String[this.userNames.size()];
-        return this.userNames.toArray(stockArr);
+    public ArrayList<String> getUserNames(){
+//        String[] stockArr = new String[this.userNames.size()];
+//        return this.userNames.toArray(stockArr);
+        return userNames;
+    }
+
+    public String buildUserNamesString(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for(String userName : this.userNames){
+            sb.append("\"" + userName + "\",");
+        }
+        sb.deleteCharAt(sb.length()-1);
+        sb.append("]");
+        return sb.toString();
     }
 }

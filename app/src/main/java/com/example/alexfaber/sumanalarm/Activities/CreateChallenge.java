@@ -1,5 +1,6 @@
 package com.example.alexfaber.sumanalarm.Activities;
 
+import android.content.Context;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,7 +8,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,16 +17,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.Models.Backend;
-import com.example.alexfaber.sumanalarm.Models.Challenge;
+import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
 import com.example.alexfaber.sumanalarm.R;
-import com.example.alexfaber.sumanalarm.UserNameListviewHelper;
+import com.example.alexfaber.sumanalarm.UserNameListViewHelper;
 
 public class CreateChallenge extends ActionBarActivity implements View.OnClickListener{
     //Instance variables
-    private UserNameListviewHelper userNameListViewHelper;
+    private UserNameListViewHelper userNameListViewHelper;
     private String TAG = "CreateChallenge";
     private ListView userNameListView;
     private ArrayAdapter<String> userNamesAdapter;
+    private Context self;
 
     //Private methods
 
@@ -50,7 +51,6 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
             Toast.makeText(this, "Username (" + username + ") already added", Toast.LENGTH_LONG).show();
             return;
         }
-        Toast.makeText(this, "Successfully added " + username, Toast.LENGTH_LONG).show();
 
         Log.v(TAG, et.getText().toString());
 
@@ -66,7 +66,8 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_challenge);
-        this.userNameListViewHelper = new UserNameListviewHelper();
+        this.userNameListViewHelper = new UserNameListViewHelper();
+        self = this;
 
         //Wire up submit button
         Button confirmButton = (Button)findViewById(R.id.add_username_button);
@@ -126,18 +127,25 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
                 break;
             }
             case R.id.create_challenge_button: {
-                Log.v(TAG, "Create Challenge Button Pressed");
-                Backend.createChallenge("55358051ac10a93834970cc3", userNameListViewHelper.getUserNames(), new Backend.BackendCallback() {
+                ChallengeRESTClient.create("55358051ac10a93834970cc3", userNameListViewHelper.getUserNames(), new Backend.BackendCallback() {
                     @Override
                     public void onRequestCompleted(Object result) {
-                        Challenge challenge = (Challenge)result;
-                        //TODO send user to a new activity with all the information.
-                        Log.v(TAG, challenge.toString());
+                        Toast.makeText(self, "Successfully Submitted to Server!", Toast.LENGTH_LONG).show();
                     }
 
                     @Override
-                    public void onRequestFailed(String message) {
-                        Log.v(TAG, "Request Failed");
+                    public void onRequestFailed(String errorCode) {
+                        switch(errorCode){
+                            case "400":
+                                Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
+                                break;
+                            case "404":
+                                Toast.makeText(self, errorCode + " : No User Accounts Found", Toast.LENGTH_LONG).show();
+                                break;
+                            default:
+                                Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
+                                break;
+                        }
                     }
                 });
             }

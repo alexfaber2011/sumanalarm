@@ -29,4 +29,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'net.callumtaylor:asynchttpclient:1.5'
     compile 'com.google.code.gson:gson:2.3.1'
+    compile project(':volley')
 }
