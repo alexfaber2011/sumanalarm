@@ -8,6 +8,7 @@
     <string name="title_activity_alarm">Alarm</string>
     <string name="title_activity_challenges">Challenges</string>
     <string name="title_activity_create_challenge">Create Challenge</string>
+    <string name="snooze">Snooze</string>
 
     <!-- action bar -->
     <string name="set_alarm">Set Alarm</string>

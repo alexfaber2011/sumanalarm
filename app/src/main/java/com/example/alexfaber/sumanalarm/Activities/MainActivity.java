@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.alexfaber.sumanalarm.Alarm;
 import com.example.alexfaber.sumanalarm.AlarmReceiver;
 import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.R;
@@ -28,11 +29,6 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
 
     TimePicker picker;
-
-    final long DAY = 86400000;
-    final long HOUR = 3600000;
-    final long MINUTE = 60000;
-    final long SECOND = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,76 +92,10 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Integer minutes = picker.getCurrentMinute();
                 Integer hours = picker.getCurrentHour();
 
-                if (!inTheFuture(hours, minutes))
-                {
-                    Toast.makeText(this, "Alarm is set to a time in the past, please pick a time in the future.",
-                            Toast.LENGTH_LONG).show();
-                    break;
-                }
-
-                long alarmTime = getAlarmTimeInMilliseconds(hours, minutes);
-
-                Intent intent = new Intent(this, AlarmReceiver.class);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
-                AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
-
-                // TODO: Pretty print the alarm time from now
-                long difference = alarmTime - System.currentTimeMillis();
-
-                String timeFromNow = prettyPrintTimeDifference(difference);
-
-                Toast.makeText(this, "Alarm is set to go off " + timeFromNow + "from now",
-                        Toast.LENGTH_SHORT).show();
-                Log.v("test", "Set alarm at: " + Long.toString(System.currentTimeMillis()));
+                Alarm.getAlarm().setAlarmAtTime(this, minutes, hours);
 
                 break;
             }
         }
-    }
-
-    private long getAlarmTimeInMilliseconds(int hours, int minutes)
-    {
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int month = Calendar.getInstance().get(Calendar.MONTH);
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-
-        GregorianCalendar today = new GregorianCalendar(year, month, day);
-
-        return today.getTimeInMillis() + (HOUR * hours) + (MINUTE * minutes);
-    }
-
-    private boolean inTheFuture(int alarmHour, int alarmMinute)
-    {
-        int currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int currentMinute = Calendar.getInstance().get(Calendar.MINUTE);
-
-        boolean futureHour = alarmHour > currentHour;
-        boolean futureMinuteThisHour = (alarmHour == currentHour) && (alarmMinute > currentMinute);
-
-        return futureHour || futureMinuteThisHour;
-    }
-
-    private String prettyPrintTimeDifference(long timeDifference)
-    {
-        int days = (int)(timeDifference / DAY);
-        timeDifference -= days * DAY;
-        int hours = (int)(timeDifference / HOUR);
-        timeDifference -= hours * HOUR;
-        int minutes = (int)(timeDifference / MINUTE);
-        timeDifference -= minutes * MINUTE;
-        int seconds = (int)(timeDifference / SECOND);
-
-        String output = "";
-        if (days > 0)
-            output += Integer.toString(days) + " days ";
-        if (hours > 0)
-            output += Integer.toString(hours) + " hours ";
-        if (minutes > 0)
-            output += Integer.toString(minutes) + " minutes ";
-        if (seconds > 0)
-            output += Integer.toString(seconds) + " seconds ";
-
-        return output;
     }
 }

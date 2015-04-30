@@ -1,5 +1,6 @@
 package com.example.alexfaber.sumanalarm.Activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.alexfaber.sumanalarm.Alarm;
 import com.example.alexfaber.sumanalarm.R;
 
 public class AlarmActivity extends ActionBarActivity{
@@ -27,6 +29,13 @@ public class AlarmActivity extends ActionBarActivity{
         // Turn alarm on
         toggleAlarmSound();
     }
+
+    protected void onDestroy()
+    {
+        if (alarmTone.isPlaying())
+            alarmTone.stop();
+    }
+
 
     private void setupAlarmTone()
     {
@@ -50,9 +59,24 @@ public class AlarmActivity extends ActionBarActivity{
             alarmTone.play();
     }
 
+    public void setSnooze(View view)
+    {
+        Log.v("AlarmActivity", "setSnooze() called at: " + System.currentTimeMillis());
+
+        if (alarmTone.isPlaying())
+            toggleAlarmSound();
+
+        Intent mainActivityIntent = new Intent(this, MainActivity.class);
+        Alarm.getAlarm().setSnooze(this);
+        startActivity(mainActivityIntent);
+    }
+
     public void toggleAlarm(View view)
     {
-        toggleAlarmSound();
+        Alarm.getAlarm().turnedOff();
+        if (alarmTone.isPlaying())
+            toggleAlarmSound();
+
         Button button = (Button) findViewById(R.id.toggleButton);
         button.setEnabled(false);
 
