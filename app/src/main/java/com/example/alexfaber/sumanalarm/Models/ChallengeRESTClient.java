@@ -10,14 +10,19 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.MyVolley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,9 +42,6 @@ public class ChallengeRESTClient extends Application{
 
     public static void create(String userId, ArrayList<String> userNames, Backend.BackendCallback callback){
         // Post params to be sent to the server
-//        HashMap<String, String> params = new HashMap<String, String>();
-//        params.put("owner", userId);
-
         JSONObject jsonParams = new JSONObject();
         try {
             jsonParams.put("owner", userId);
@@ -47,9 +49,6 @@ public class ChallengeRESTClient extends Application{
         }catch(JSONException e){
             e.printStackTrace();
         }
-
-//        HashMap<String, String[]> arrayParams = new HashMap<String, String[]>();
-//        arrayParams.put("userNames", userNames);
 
         Log.v(TAG, "CREATE 2 Called");
         RequestQueue queue = MyVolley.getRequestQueue();
@@ -61,12 +60,56 @@ public class ChallengeRESTClient extends Application{
         queue.add(req);
     }
 
+    /**
+     * Should return an array of Challenge objects
+     *
+     * @param userId
+     * @param callback
+     */
+    public static void fetchAll(String userId, Backend.BackendCallback callback){
+        String getParams = String.format("?owner=%1$s",userId);
+        Log.v(TAG, "fetchAll called");
+        RequestQueue queue = MyVolley.getRequestQueue();
+        JsonArrayRequest req = new JsonArrayRequest(
+                Request.Method.GET,
+                SERVER_URL + "challenges/" + getParams,
+                null,
+                createMyReqArraySuccessListener(callback),
+                createMyReqErrorListener(callback)
+        );
+        queue.add(req);
+    }
+
     private static Response.Listener<JSONObject> createMyReqSuccessListener(final Backend.BackendCallback callback){
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 VolleyLog.v(response.toString());
                 callback.onRequestCompleted(response);
+            }
+        };
+    }
+
+    private static Response.Listener<JSONArray> createMyReqArraySuccessListener(final Backend.BackendCallback callback){
+        return new Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+                VolleyLog.v(response.toString());
+                List<Challenge> challenges = new ArrayList<Challenge>();
+                //iterate over each JSONObject
+                for(int i = 0; i < response.length(); i++){
+                    try {
+                        JSONObject obj = (JSONObject) response.get(i);
+                        String JSONString = obj.toString();
+                        Gson gson = new GsonBuilder().create();
+                        challenges.add(gson.fromJson(JSONString, Challenge.class));
+                    }catch(JSONException e){
+                        e.printStackTrace();
+                        Log.e(TAG, "Unable to extract JSON");
+                    }
+
+                }
+                callback.onRequestCompleted(challenges);
             }
         };
     }

@@ -4,12 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.alexfaber.sumanalarm.Activities.Challenges">
 
-<Button
-    android:id="@+id/create_challenge"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_weight="0.1"
-    android:text="@string/create_challenge"/>
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/challengesListView"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.9"/>
+
+    <Button
+        android:id="@+id/create_challenge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:text="@string/create_challenge"/>
 
 
 </LinearLayout>

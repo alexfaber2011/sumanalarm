@@ -36,7 +36,7 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
         this.userNameListView.setAdapter(userNamesAdapter);
     }
 
-    private void onSubmit(){
+    private void submitCreatedChallenge(){
         EditText et = (EditText)findViewById(R.id.add_username_text);
 
         //Check to see if they've actually supplied a username
@@ -80,7 +80,7 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
         et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                onSubmit();
+                submitCreatedChallenge();
                 return true;
             }
         });
@@ -123,7 +123,7 @@ public class CreateChallenge extends ActionBarActivity implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_username_button: {
-                onSubmit();
+                submitCreatedChallenge();
                 break;
             }
             case R.id.create_challenge_button: {

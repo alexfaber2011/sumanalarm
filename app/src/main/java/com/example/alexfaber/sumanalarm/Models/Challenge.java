@@ -31,7 +31,7 @@ public class Challenge {
         sb.append(("\n\t userName: " + userName));
         sb.append(("\n\t participants: "));
         for(Participant p : participants){
-            sb.append("\n\t\t" + p.toString());
+            sb.append("\n\t\t\t" + p.toString());
         }
 
         return sb.toString();
