@@ -44,6 +44,8 @@ public class UserSignUpActivity extends ActionBarActivity implements View.OnClic
                 SharedPreferences userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
                 user.commitPrefs(userPrefs);
 
+                Toast.makeText(self, "Welcome to SumanAlarm", Toast.LENGTH_SHORT).show();
+
                 //Redirect them to main activity
                 Intent intent = new Intent(self, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -57,10 +59,10 @@ public class UserSignUpActivity extends ActionBarActivity implements View.OnClic
                         Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
                         break;
                     case "404":
-                        Toast.makeText(self, errorCode + " : No User Account Found", Toast.LENGTH_LONG).show();
+                        Toast.makeText(self, errorCode + " : Route Not Found", Toast.LENGTH_LONG).show();
                         break;
                     default:
-                        Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
+                        Toast.makeText(self, "User Name already Exists", Toast.LENGTH_LONG).show();
                         break;
                 }
             }
