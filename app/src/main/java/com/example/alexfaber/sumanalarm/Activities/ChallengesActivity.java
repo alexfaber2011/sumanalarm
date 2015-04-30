@@ -2,6 +2,7 @@ package com.example.alexfaber.sumanalarm.Activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyLog;
+import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.Models.Backend;
 import com.example.alexfaber.sumanalarm.Models.Challenge;
 import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
@@ -30,10 +32,19 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
     private ArrayAdapter<String> challengesArrayAdapter;
     private Context self;
     private final String TAG = "ChallengesActivity";
+    private SharedPreferences userPrefs;
 
 
     private void updateChallengesListView(){
-        ChallengeRESTClient.fetchAll("55358051ac10a93834970cc3", new Backend.BackendCallback(){
+        //Grab shared preferences; make sure they're logged in before fetching
+        userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
+        String userId = userPrefs.getString("_id", null);
+        if(userId == null){
+            Toast.makeText(self, "MUST BE LOGGED IN", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        ChallengeRESTClient.fetchAll(userId, new Backend.BackendCallback(){
             @Override
             public void onRequestCompleted(Object result) {
                 List<Challenge> challenges = (ArrayList)result;
@@ -57,7 +68,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                         Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
                         break;
                     case "404":
-                        Toast.makeText(self, errorCode + " : No User Accounts Found", Toast.LENGTH_LONG).show();
+                        Toast.makeText(self, errorCode + " : No Challenges Found", Toast.LENGTH_LONG).show();
                         break;
                     default:
                         Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
