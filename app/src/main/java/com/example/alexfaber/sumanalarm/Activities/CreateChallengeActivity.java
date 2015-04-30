@@ -21,10 +21,10 @@ import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
 import com.example.alexfaber.sumanalarm.R;
 import com.example.alexfaber.sumanalarm.UserNameListViewHelper;
 
-public class CreateChallenge extends ActionBarActivity implements View.OnClickListener{
+public class CreateChallengeActivity extends ActionBarActivity implements View.OnClickListener{
     //Instance variables
     private UserNameListViewHelper userNameListViewHelper;
-    private String TAG = "CreateChallenge";
+    private String TAG = "CreateChallengeActivity";
     private ListView userNameListView;
     private ArrayAdapter<String> userNamesAdapter;
     private Context self;

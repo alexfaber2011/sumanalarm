@@ -30,7 +30,7 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".Activities.Challenges"
+            android:name=".Activities.ChallengesActivity"
             android:label="@string/title_activity_challenges" >
         </activity>
         <activity
@@ -51,12 +51,16 @@
         </receiver>
 
         <activity
-            android:name=".Activities.CreateChallenge"
+            android:name=".Activities.CreateChallengeActivity"
             android:label="@string/title_activity_create_challenge" >
         </activity>
         <activity
-            android:name=".Activities.UserLogin"
+            android:name=".Activities.UserLoginActivity"
             android:label="@string/title_activity_user_login_sign_up" >
+        </activity>
+        <activity
+            android:name=".Activities.UserSignUpActivity"
+            android:label="@string/title_activity_sign_up" >
         </activity>
     </application>
 
