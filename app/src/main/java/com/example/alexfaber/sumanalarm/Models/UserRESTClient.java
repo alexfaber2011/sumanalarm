@@ -44,12 +44,36 @@ public class UserRESTClient extends Application{
         queue.add(req);
     }
 
+    public static void signup(String firstName, String lastName, String userName, String password, Backend.BackendCallback callback){
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("firstName", firstName);
+            jsonParams.put("lastName", lastName);
+            jsonParams.put("userName", userName);
+            jsonParams.put("password", password);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        Log.v(TAG, "signup called");
+        RequestQueue queue = MyVolley.getRequestQueue();
+        JsonObjectRequest req = new JsonObjectRequest(
+                Request.Method.POST, SERVER_URL + "users/",
+                jsonParams,
+                createMyReqSuccessListener(callback),
+                createMyReqErrorListener(callback));
+        queue.add(req);
+    }
+
     private static Response.Listener<JSONObject> createMyReqSuccessListener(final Backend.BackendCallback callback){
         return new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 VolleyLog.v(response.toString());
-                callback.onRequestCompleted(response);
+                String JSONString = response.toString();
+                Gson gson = new GsonBuilder().create();
+                User u = gson.fromJson(JSONString, User.class);
+                callback.onRequestCompleted(u);
             }
         };
     }

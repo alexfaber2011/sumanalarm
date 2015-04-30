@@ -24,12 +24,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class Challenges extends ActionBarActivity implements View.OnClickListener{
+public class ChallengesActivity extends ActionBarActivity implements View.OnClickListener{
 
     private ListView challengesListView;
     private ArrayAdapter<String> challengesArrayAdapter;
     private Context self;
-    private final String TAG = "Challenges";
+    private final String TAG = "ChallengesActivity";
 
 
     private void updateChallengesListView(){
@@ -115,7 +115,7 @@ public class Challenges extends ActionBarActivity implements View.OnClickListene
                 startActivity(intent);
                 return(true);
             case R.id.challenges_button:
-                intent = new Intent(this, Challenges.class);
+                intent = new Intent(this, ChallengesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
@@ -127,7 +127,7 @@ public class Challenges extends ActionBarActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.create_challenge: {
-                Intent intent = new Intent(this, CreateChallenge.class);
+                Intent intent = new Intent(this, CreateChallengeActivity.class);
                 startActivity(intent);
             }
         }

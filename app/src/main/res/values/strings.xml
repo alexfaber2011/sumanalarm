@@ -13,10 +13,13 @@
     <!-- action bar -->
     <string name="set_alarm">Set Alarm</string>
 
-    <!--User Login/SignUp Activity-->
+    <!-- User Login Activity -->
     <string name="suman_alarm_login">SUMAN ALARM \n Login</string>
     <string name="ime_login_signup">Go</string>
     <string name="title_activity_user_login_sign_up">Suman Alarm - Login</string>
+
+    <!-- User SignUp Activity -->
+    <string name="suman_alarm_signup">SUMAN ALARM \n Sign Up</string>
 
     <!-- Set Alarm Activity -->
     <string name="confirm_alarm">Confirm Alarm: </string>
@@ -26,5 +29,6 @@
 
     <!-- Create Challenge Activity -->
     <string name="add_username">Add</string>
+    <string name="title_activity_sign_up">SignUpActivity</string>
 
 </resources>

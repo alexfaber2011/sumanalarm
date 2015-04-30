@@ -45,7 +45,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         String userName = userPrefs.getString("userName", null);
         Log.v(TAG, "userName: " + userName);
         if(userName == null){
-            Intent intent = new Intent(this, UserLogin.class);
+            Intent intent = new Intent(this, UserLoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         }
@@ -76,7 +76,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 startActivity(intent);
                 return(true);
             case R.id.challenges_button:
-                intent = new Intent(this, Challenges.class);
+                intent = new Intent(this, ChallengesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);

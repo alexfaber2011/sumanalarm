@@ -20,9 +20,9 @@ import com.example.alexfaber.sumanalarm.Models.User;
 import com.example.alexfaber.sumanalarm.Models.UserRESTClient;
 import com.example.alexfaber.sumanalarm.R;
 
-public class UserLogin extends ActionBarActivity implements View.OnClickListener{
+public class UserLoginActivity extends ActionBarActivity implements View.OnClickListener{
 
-    private static final String TAG = "UserLogin";
+    private static final String TAG = "UserLoginActivity";
     private Context self;
 
     private void login(){
@@ -71,6 +71,8 @@ public class UserLogin extends ActionBarActivity implements View.OnClickListener
         //Wire up login button
         Button loginButton = (Button)findViewById(R.id.login_button);
         loginButton.setOnClickListener(this);
+        Button signUpButton = (Button)findViewById(R.id.go_to_signup_button);
+        signUpButton.setOnClickListener(this);
 
         //Wire up send button on keyboard
         EditText et = (EditText)findViewById(R.id.login_password);
@@ -111,6 +113,13 @@ public class UserLogin extends ActionBarActivity implements View.OnClickListener
         switch (v.getId()) {
             case R.id.login_button: {
                 login();
+                break;
+            }
+            case R.id.go_to_signup_button:{
+                //Redirect them to signup activity
+                Intent intent = new Intent(self, UserSignUpActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
                 break;
             }
         }

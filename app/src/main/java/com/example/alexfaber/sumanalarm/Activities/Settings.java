@@ -43,7 +43,7 @@ public class Settings extends ActionBarActivity {
                 startActivity(intent);
                 return(true);
             case R.id.challenges_button:
-                intent = new Intent(this, Challenges.class);
+                intent = new Intent(this, ChallengesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
