@@ -61,7 +61,7 @@ public class ChallengeRESTClient extends Application{
     }
 
     /**
-     * Should return an array of Challenge objects
+     * Returns an List of Challenge objects
      *
      * @param userId
      * @param callback

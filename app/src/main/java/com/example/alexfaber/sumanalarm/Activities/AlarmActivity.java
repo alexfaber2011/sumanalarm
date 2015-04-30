@@ -6,6 +6,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -14,6 +15,8 @@ import com.example.alexfaber.sumanalarm.R;
 
 public class AlarmActivity extends ActionBarActivity{
     private Ringtone alarmTone;
+
+    private static final String TAG = "AlarmActivity";
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

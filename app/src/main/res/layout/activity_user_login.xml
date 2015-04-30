@@ -1,0 +1,48 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.alexfaber.sumanalarm.Activities.UserLogin"
+    android:weightSum="1">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/suman_alarm_welcome_text"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.50"
+        android:textAlignment="center"
+        android:text="@string/suman_alarm_login"
+        android:gravity="center_horizontal|bottom"
+        android:textSize="22dp"
+        android:paddingBottom="10dp" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_user_name"
+        android:layout_gravity="center_horizontal"
+        android:autoText="false"
+        android:singleLine="true"
+        android:hint="User Name" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/login_password"
+        android:layout_gravity="center_horizontal"
+        android:autoText="false"
+        android:singleLine="true"
+        android:password="true"
+        android:hint="Password"
+        android:imeOptions="actionSend"
+        android:imeActionLabel="@string/ime_login_signup"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/ime_login_signup"
+        android:id="@+id/login_button"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>

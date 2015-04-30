@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
  */
 public class ApplicationController extends Application {
     public static final String TAG = "VolleyPatterns";
+    public static final String USER_SHARED_PREFS = "USER_SHARED_PREFS";
 
     /**
      * A singleton instance of the application class for easy access in other places
@@ -26,6 +27,8 @@ public class ApplicationController extends Application {
         // initialize the singleton
         sInstance = this;
         init();
+
+
     }
 
     private void init(){

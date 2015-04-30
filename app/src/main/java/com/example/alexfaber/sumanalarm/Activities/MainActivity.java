@@ -2,7 +2,9 @@ package com.example.alexfaber.sumanalarm.Activities;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.AlarmReceiver;
+import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.R;
 
 import java.util.Calendar;
@@ -23,6 +26,7 @@ import java.util.GregorianCalendar;
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
 
     private static final String TAG = "MainActivity";
+
     TimePicker picker;
 
     final long DAY = 86400000;
@@ -35,11 +39,20 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.v(TAG, "CREATED");
         picker = (TimePicker)findViewById(R.id.picker);
 
         Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
         confirmButton.setOnClickListener(this);
+
+        //Check to see if user is logged in (by checking only their userName... lawlz)
+        SharedPreferences userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
+        String userName = userPrefs.getString("userName", null);
+        Log.v(TAG, "userName: " + userName);
+        if(userName == null){
+            Intent intent = new Intent(this, UserLogin.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+        }
     }
 
 
