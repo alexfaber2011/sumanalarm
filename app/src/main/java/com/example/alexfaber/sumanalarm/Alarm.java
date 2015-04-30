@@ -15,10 +15,10 @@ import java.util.GregorianCalendar;
 public class Alarm {
     private static Alarm alarmSingleton = new Alarm();
 
-    final long DAY = 86400000;
-    final long HOUR = 3600000;
-    final long MINUTE = 60000;
-    final long SECOND = 1000;
+    public final long DAY = 86400000;
+    public final long HOUR = 3600000;
+    public final long MINUTE = 60000;
+    public final long SECOND = 1000;
     boolean alarmSet;
 
     public static Alarm getAlarm()
@@ -56,15 +56,20 @@ public class Alarm {
         alarmSet = true;
     }
 
-    public void setSnooze(Activity sendingActivity)
+    public void setSnooze(Activity sendingActivity, long snoozeTime)
     {
         alarmSet = false;
-        long now = System.currentTimeMillis();
-        now += 5 * MINUTE;
+        long snoozeAlarmTime = System.currentTimeMillis() + snoozeTime;
 
-        setAlarm(sendingActivity, now);
+        setAlarm(sendingActivity, snoozeAlarmTime);
 
-        Toast.makeText(sendingActivity, "Snoozing: Alarm is set to go off 5 minutes from now",
+        String timePhrase = "";
+        if (snoozeTime / MINUTE < 60)
+            timePhrase = snoozeTime / MINUTE + " minutes";
+        else
+            timePhrase = snoozeTime / HOUR + " hour";
+
+        Toast.makeText(sendingActivity, "Snoozing: Alarm is set to go off " + timePhrase + " from now",
                 Toast.LENGTH_SHORT).show();
     }
 

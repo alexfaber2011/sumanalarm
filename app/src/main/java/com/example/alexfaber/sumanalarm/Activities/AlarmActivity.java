@@ -66,8 +66,26 @@ public class AlarmActivity extends ActionBarActivity{
         if (alarmTone.isPlaying())
             toggleAlarmSound();
 
+        long time = 0;
+        if (view.getId() == R.id.snooze5minutes)
+        {
+            time = 5 * Alarm.getAlarm().MINUTE;
+        }
+        else if (view.getId() == R.id.snooze10minutes)
+        {
+            time = 10 * Alarm.getAlarm().MINUTE;
+        }
+        else if (view.getId() == R.id.snooze30minutes)
+        {
+            time = 30 * Alarm.getAlarm().MINUTE;
+        }
+        else if (view.getId() == R.id.snooze60minutes)
+        {
+            time = 60 * Alarm.getAlarm().MINUTE;
+        }
+        Log.v("AlarmActivity", "button id: " + view.getId());
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
-        Alarm.getAlarm().setSnooze(this);
+        Alarm.getAlarm().setSnooze(this, time);
         startActivity(mainActivityIntent);
     }
 
