@@ -33,12 +33,13 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
     private Context self;
     private final String TAG = "ChallengesActivity";
     private SharedPreferences userPrefs;
+    private String userId;
 
 
     private void updateChallengesListView(){
         //Grab shared preferences; make sure they're logged in before fetching
         userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
-        String userId = userPrefs.getString("_id", null);
+        userId = userPrefs.getString("_id", null);
         if(userId == null){
             Toast.makeText(self, "MUST BE LOGGED IN", Toast.LENGTH_LONG).show();
             return;
