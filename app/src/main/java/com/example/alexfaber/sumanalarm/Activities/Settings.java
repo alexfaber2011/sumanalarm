@@ -1,16 +1,48 @@
 package com.example.alexfaber.sumanalarm.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import com.example.alexfaber.sumanalarm.ApplicationController;
+import com.example.alexfaber.sumanalarm.Models.Backend;
+import com.example.alexfaber.sumanalarm.Models.UserRESTClient;
 import com.example.alexfaber.sumanalarm.R;
 
 
 public class Settings extends ActionBarActivity {
+
+    private Context self;
+    private SharedPreferences userPrefs;
+    private String userId, userName;
+
+    private void getCurrentSettings(){
+        userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
+        userId = userPrefs.getString("_id", null);
+        if(userId == null){
+            Toast.makeText(self, "MUST BE LOGGED IN", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        UserRESTClient.fetchSettings(userId, new Backend.BackendCallback(){
+            @Override
+            public void onRequestCompleted(Object results){
+                
+            }
+
+            @Override
+            public void onRequestFailed(String errorCode){
+
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

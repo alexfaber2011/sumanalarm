@@ -26,8 +26,8 @@ import java.util.List;
  */
 public class UserRESTClient extends Application{
     private static final String TAG = "UserRESTClient";
-//    private static final String SERVER_URL = "http://104.236.94.200:5555/";
-    private static final String SERVER_URL = "http://10.0.2.2:5000/";
+    private static final String SERVER_URL = "http://104.236.94.200:5555/";
+//    private static final String SERVER_URL = "http://10.0.2.2:5000/";
 
 
     public static void login(String userName, String password, Backend.BackendCallback callback){
@@ -62,6 +62,25 @@ public class UserRESTClient extends Application{
                 jsonParams,
                 createMyReqSuccessListener(callback),
                 createMyReqErrorListener(callback));
+        queue.add(req);
+    }
+
+    public static void fetchSettings(String userId, Backend.BackendCallback callback){
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("userName", userId);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        String getParams = String.format("?_id=%1$s", userId);
+        RequestQueue queue = MyVolley.getRequestQueue();
+        JsonObjectRequest req = new JsonObjectRequest(
+                Request.Method.GET, SERVER_URL + "users/" + getParams,
+                jsonParams,
+                createMyReqSuccessListener(callback),
+                createMyReqErrorListener(callback)
+        );
         queue.add(req);
     }
 
