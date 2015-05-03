@@ -84,6 +84,25 @@ public class UserRESTClient extends Application{
         queue.add(req);
     }
 
+    public static void updateSettings(String userId, String userName, String snoozes, Backend.BackendCallback callback){
+        JSONObject jsonParams = new JSONObject();
+        try{
+            jsonParams.put("userName", userName);
+            jsonParams.put("snoozes", snoozes);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+
+        RequestQueue queue = MyVolley.getRequestQueue();
+        JsonObjectRequest req = new JsonObjectRequest(
+                Request.Method.PUT, SERVER_URL + "users/" + userId,
+                jsonParams,
+                createMyReqSuccessListener(callback),
+                createMyReqErrorListener(callback)
+        );
+        queue.add(req);
+    }
+
     private static Response.Listener<JSONObject> createMyReqSuccessListener(final Backend.BackendCallback callback){
         return new Response.Listener<JSONObject>() {
             @Override

@@ -1,7 +1,5 @@
 package com.example.alexfaber.sumanalarm.Activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,15 +11,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.Alarm;
-import com.example.alexfaber.sumanalarm.AlarmReceiver;
 import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.R;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
@@ -34,9 +27,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         picker = (TimePicker)findViewById(R.id.picker);
-
         Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
         confirmButton.setOnClickListener(this);
 
@@ -71,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 startActivity(intent);
                 return(true);
             case R.id.settings_button:
-                intent = new Intent(this, Settings.class);
+                intent = new Intent(this, SettingsActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);

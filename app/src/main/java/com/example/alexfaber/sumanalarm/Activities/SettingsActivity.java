@@ -5,61 +5,43 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.VolleyLog;
 import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.Models.Backend;
-import com.example.alexfaber.sumanalarm.Models.Challenge;
-import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
+import com.example.alexfaber.sumanalarm.Models.User;
+import com.example.alexfaber.sumanalarm.Models.UserRESTClient;
 import com.example.alexfaber.sumanalarm.R;
 
-import java.util.ArrayList;
-import java.util.List;
 
+public class SettingsActivity extends ActionBarActivity implements View.OnClickListener {
 
-public class ChallengesActivity extends ActionBarActivity implements View.OnClickListener{
-
-    private ListView challengesListView;
-    private ArrayAdapter<String> challengesArrayAdapter;
     private Context self;
-    private final String TAG = "ChallengesActivity";
     private SharedPreferences userPrefs;
-    private String userId;
+    private String userName, userId;
+    private int maxSnoozes;
+    private EditText userNameET, maxSnoozesEt;
 
-
-    private void updateChallengesListView(){
-        //Grab shared preferences; make sure they're logged in before fetching
-        userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
-        userId = userPrefs.getString("_id", null);
-        if(userId == null){
-            Toast.makeText(self, "MUST BE LOGGED IN", Toast.LENGTH_LONG).show();
+    public void saveSettings(){
+        //Check to see if they've actually supplied a username
+        String updatedUserName = userNameET.getText().toString();
+        String updatedMaxSnoozes = maxSnoozesEt.getText().toString();
+        if(updatedUserName.equals("") || updatedMaxSnoozes.equals("")){
+            Toast.makeText(this, "Must supply a username and snoozes", Toast.LENGTH_LONG).show();
             return;
         }
-
-        ChallengeRESTClient.fetchAll(userId, new Backend.BackendCallback(){
+        UserRESTClient.updateSettings(userId, updatedUserName, updatedMaxSnoozes, new Backend.BackendCallback() {
             @Override
             public void onRequestCompleted(Object result) {
-                List<Challenge> challenges = (ArrayList)result;
-                Log.v(TAG, challenges.toString());
-                VolleyLog.v("updateChallengesListView: " + challenges.toString());
-                String[] simpleChallenges = new String[challenges.size()];
-                Challenge c;
-                for(int i = 0; i < challenges.size(); i++){
-                    c = challenges.get(i);
-                    simpleChallenges[i] = c._id;
-                }
-                challengesArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, simpleChallenges);
-                challengesListView.setAdapter(challengesArrayAdapter);
-                Log.v(TAG, simpleChallenges.toString());
+                User user = (User)result;
+                user.commitPrefs(userPrefs);
+                Toast.makeText(self, "Successfully updated User Account", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -69,7 +51,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                         Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
                         break;
                     case "404":
-                        Toast.makeText(self, errorCode + " : No Challenges Found", Toast.LENGTH_LONG).show();
+                        Toast.makeText(self, errorCode + " : No User Accounts Found", Toast.LENGTH_LONG).show();
                         break;
                     default:
                         Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
@@ -82,24 +64,30 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_challenges);
+        setContentView(R.layout.activity_settings);
         self = this;
 
-        //Wire up create challenge button
-        Button confirmButton = (Button)findViewById(R.id.create_challenge);
+        //Wire up submit button
+        Button confirmButton = (Button)findViewById(R.id.save_settings);
         confirmButton.setOnClickListener(this);
 
-        //Initialize list view
-        this.challengesListView = (ListView)findViewById(R.id.challengesListView);
-        this.challengesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Move to challenge activity
-            }
-        });
+        //Get userName and make sure they're logged in at the same time
+        userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
+        userName = userPrefs.getString("userName", null);
+        maxSnoozes = userPrefs.getInt("snoozes", -1);
+        userId = userPrefs.getString("_id", null);
+        if(userName == null || maxSnoozes == -1 || userId == null){
+            Intent intent = new Intent(this, UserLoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+            return;
+        }
 
-        //Grab any challenges that are available
-        updateChallengesListView();
+        //Update the editText box with number of snoozes and id
+        userNameET = (EditText)findViewById(R.id.settings_user_name);
+        maxSnoozesEt = (EditText)findViewById(R.id.settings_max_snoozes);
+        userNameET.setText(userName, TextView.BufferType.EDITABLE);
+        maxSnoozesEt.setText(Integer.toString(maxSnoozes), TextView.BufferType.EDITABLE);
     }
 
 
@@ -138,9 +126,9 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.create_challenge: {
-                Intent intent = new Intent(this, CreateChallengeActivity.class);
-                startActivity(intent);
+            case R.id.save_settings: {
+                saveSettings();
+                break;
             }
         }
     }

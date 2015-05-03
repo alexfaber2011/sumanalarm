@@ -127,6 +127,7 @@ public class CreateChallengeActivity extends ActionBarActivity implements View.O
                 break;
             }
             case R.id.create_challenge_button: {
+                //TODO create a challenge by grabbing the appropriate userId first
                 ChallengeRESTClient.create("55358051ac10a93834970cc3", userNameListViewHelper.getUserNames(), new Backend.BackendCallback() {
                     @Override
                     public void onRequestCompleted(Object result) {
