@@ -1,6 +1,7 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/swipe_container"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.alexfaber.sumanalarm.Activities.ChallengesActivity">
 
@@ -9,7 +10,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/challengesListView"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.9"/>
+        android:layout_weight=".8" />
 
     <Button
         android:id="@+id/create_challenge"
@@ -19,4 +20,4 @@
         android:text="@string/create_challenge"/>
 
 
-</LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

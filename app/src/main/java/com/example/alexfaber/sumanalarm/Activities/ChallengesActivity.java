@@ -3,6 +3,7 @@ package com.example.alexfaber.sumanalarm.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChallengesActivity extends ActionBarActivity implements View.OnClickListener{
+public class ChallengesActivity extends ActionBarActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private ListView challengesListView;
     private ArrayAdapter<String> challengesArrayAdapter;
@@ -34,6 +35,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
     private final String TAG = "ChallengesActivity";
     private SharedPreferences userPrefs;
     private String userId;
+    private SwipeRefreshLayout swipeLayout;
 
 
     private void updateChallengesListView(){
@@ -60,10 +62,12 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                 challengesArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, simpleChallenges);
                 challengesListView.setAdapter(challengesArrayAdapter);
                 Log.v(TAG, simpleChallenges.toString());
+                swipeLayout.setRefreshing(false);
             }
 
             @Override
             public void onRequestFailed(String errorCode) {
+                swipeLayout.setRefreshing(false);
                 switch(errorCode){
                     case "400":
                         Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
@@ -84,6 +88,11 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_challenges);
         self = this;
+
+        //Wire up swipe layout
+        swipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
+        swipeLayout.setOnRefreshListener(this);
+        swipeLayout.setColorSchemeColors(android.R.color.holo_green_dark, android.R.color.holo_green_light);
 
         //Wire up create challenge button
         Button confirmButton = (Button)findViewById(R.id.create_challenge);
@@ -126,6 +135,11 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
+            case R.id.create_challenge_action_button:
+                intent = new Intent(this, CreateChallengeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return(true);
             case R.id.challenges_button:
                 intent = new Intent(this, ChallengesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -143,5 +157,11 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                 startActivity(intent);
             }
         }
+    }
+
+    @Override
+    public void onRefresh(){
+        swipeLayout.setRefreshing(true);
+        updateChallengesListView();
     }
 }

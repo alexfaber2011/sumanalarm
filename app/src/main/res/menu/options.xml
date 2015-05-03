@@ -14,6 +14,12 @@
         app:showAsAction="ifRoom">
     </item>
     <item
+        android:id="@+id/create_challenge_action_button"
+        android:title="@string/create_challenge"
+        android:icon="@drawable/ic_create_challenge"
+        app:showAsAction="ifRoom">
+    </item>
+    <item
         android:id="@+id/settings_button"
         android:title="@string/title_activity_settings"
         android:icon="@drawable/ic_action_settings"

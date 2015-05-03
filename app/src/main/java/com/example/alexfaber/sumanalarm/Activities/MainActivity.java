@@ -66,6 +66,11 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
+            case R.id.create_challenge_action_button:
+                intent = new Intent(this, CreateChallengeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return(true);
             case R.id.challenges_button:
                 intent = new Intent(this, ChallengesActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
