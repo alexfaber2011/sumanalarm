@@ -27,7 +27,7 @@ public class ApplicationController extends Application {
         // initialize the singleton
         sInstance = this;
         init();
-
+        //Initialize Gimbal Api
 
     }
 

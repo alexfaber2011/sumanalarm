@@ -32,12 +32,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by alexfaber on 4/26/15.
+ * Created by alexfaber on 6/6/6.
+ * Faber sucks
  */
 public class ChallengeRESTClient extends Application{
     private static final String TAG = "ChallengeRESTClient";
-//    private static final String SERVER_URL = "http://104.236.94.200:5555/";
-    private static final String SERVER_URL = "http://10.0.2.2:5000/";
+    private static final String SERVER_URL = "http://104.236.94.200:5555/";
+//    private static final String SERVER_URL = "http://10.0.2.2:5000/";
 
 
     public static void create(String userId, ArrayList<String> userNames, Backend.BackendCallback callback){
