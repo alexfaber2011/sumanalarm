@@ -21,6 +21,8 @@ android {
     packagingOptions{
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/notice.txt'
     }
 }
 
@@ -30,4 +32,6 @@ dependencies {
     compile 'net.callumtaylor:asynchttpclient:1.5'
     compile 'com.google.code.gson:gson:2.3.1'
     compile project(':volley')
+    compile files('libs/spring-android-core-1.0.1.RELEASE.jar')
+    compile files('libs/spring-android-rest-template-1.0.1.RELEASE.jar')
 }
