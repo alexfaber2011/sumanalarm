@@ -29,6 +29,7 @@ public class CreateChallengeActivity extends ActionBarActivity implements View.O
     //Instance variables
     private UserNameListViewHelper userNameListViewHelper;
     private String TAG = "CreateChallengeActivity";
+    private String challengeName;
     private ListView userNameListView;
     private ArrayAdapter<String> userNamesAdapter;
     private Context self;
@@ -42,7 +43,7 @@ public class CreateChallengeActivity extends ActionBarActivity implements View.O
         this.userNameListView.setAdapter(userNamesAdapter);
     }
 
-    private void submitCreatedChallenge(){
+    private void addUserName(){
         EditText et = (EditText)findViewById(R.id.add_username_text);
 
         //Check to see if they've actually supplied a username
@@ -86,7 +87,7 @@ public class CreateChallengeActivity extends ActionBarActivity implements View.O
         et.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                submitCreatedChallenge();
+                addUserName();
                 return true;
             }
         });
@@ -162,12 +163,18 @@ public class CreateChallengeActivity extends ActionBarActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.add_username_button: {
-                submitCreatedChallenge();
+                addUserName();
                 break;
             }
             case R.id.create_challenge_button: {
-                //TODO create a challenge by grabbing the appropriate userId first
-                ChallengeRESTClient.create(userId, userNameListViewHelper.getUserNames(), new Backend.BackendCallback() {
+                EditText challengeNameET = (EditText)findViewById(R.id.add_challenge_name_text);
+                challengeName = challengeNameET.getText().toString();
+                if(challengeName.equals("")){
+                    Toast.makeText(this, "Must supply a Challenge Name", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                ChallengeRESTClient.create(userId, userNameListViewHelper.getUserNames(), challengeName, new Backend.BackendCallback() {
                     @Override
                     public void onRequestCompleted(Object result) {
                         Toast.makeText(self, "Successfully Submitted to Server!", Toast.LENGTH_LONG).show();
