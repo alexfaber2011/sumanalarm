@@ -68,12 +68,12 @@ public class ChallengeRESTClient extends Application{
      * @param callback
      */
     public static void fetchAll(String userId, Backend.BackendCallback callback){
-        String getParams = String.format("?owner=%1$s",userId);
+        String getParams = String.format("?participantId=%1$s",userId);
         Log.v(TAG, "fetchAll called");
         RequestQueue queue = MyVolley.getRequestQueue();
         JsonArrayRequest req = new JsonArrayRequest(
                 Request.Method.GET,
-                SERVER_URL + "challenges/" + getParams,
+                SERVER_URL + "challenges/participant" + getParams,
                 null,
                 createMyReqArraySuccessListener(callback),
                 createMyReqErrorListener(callback)
