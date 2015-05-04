@@ -52,4 +52,14 @@ public class User {
         return sb.toString();
     }
 
+    public static void logout(SharedPreferences userPrefs){
+        SharedPreferences.Editor editor = userPrefs.edit();
+        editor.remove("userName");
+        editor.remove("firstName");
+        editor.remove("lastName");
+        editor.remove("password");
+        editor.remove("snoozes");
+        editor.remove("_id");
+        editor.commit();
+    }
 }

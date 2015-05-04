@@ -25,4 +25,10 @@
         android:icon="@drawable/ic_action_settings"
         app:showAsAction="ifRoom">
     </item>
+    <item
+        android:id="@+id/logout_button"
+        android:title="@string/logout"
+        android:icon="@drawable/ic_action_logout"
+        app:showAsAction="ifRoom">
+    </item>
 </menu>

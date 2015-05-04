@@ -21,6 +21,7 @@ import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.Models.Backend;
 import com.example.alexfaber.sumanalarm.Models.Challenge;
 import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
+import com.example.alexfaber.sumanalarm.Models.User;
 import com.example.alexfaber.sumanalarm.R;
 
 import java.util.ArrayList;
@@ -124,9 +125,10 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.set_alarm_button:
-                Intent intent = new Intent(this, MainActivity.class);
+                intent = new Intent(this, MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
@@ -142,6 +144,13 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                 return(true);
             case R.id.challenges_button:
                 intent = new Intent(this, ChallengesActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(intent);
+                return(true);
+            case R.id.logout_button:
+                SharedPreferences userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
+                User.logout(userPrefs);
+                intent = new Intent(this, UserLoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
                 startActivity(intent);
                 return(true);
