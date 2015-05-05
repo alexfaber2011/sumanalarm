@@ -7,15 +7,15 @@ import java.util.List;
  * Created by alexfaber on 4/20/15.
  */
 public class Challenge {
-    public String _id;
-    public String owner;
-    public String userName;
+    public String _id, owner, userName, name, date;
     public List<Participant> participants;
 
     public Challenge(){
         _id = "";
         owner = "";
         userName = "";
+        date = "";
+        name = "";
         participants = new ArrayList<Participant>();
     }
 

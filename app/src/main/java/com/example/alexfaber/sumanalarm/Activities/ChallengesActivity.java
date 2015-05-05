@@ -58,7 +58,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                 Challenge c;
                 for(int i = 0; i < challenges.size(); i++){
                     c = challenges.get(i);
-                    simpleChallenges[i] = c._id;
+                    simpleChallenges[i] = c.name;
                 }
                 challengesArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, simpleChallenges);
                 challengesListView.setAdapter(challengesArrayAdapter);
