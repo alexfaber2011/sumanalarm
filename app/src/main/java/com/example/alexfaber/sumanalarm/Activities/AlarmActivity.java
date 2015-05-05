@@ -26,7 +26,8 @@ public class AlarmActivity extends ActionBarActivity{
     private boolean isInitialSighting;
     private BeaconManager beaconManager;
     private BeaconEventListener beaconSightingListener;
-    private Beacon beacon;
+    private long startTime = 0;
+    private long finishTime = 0;
 
 
     private static final String TAG = "AlarmActivity";
@@ -48,8 +49,8 @@ public class AlarmActivity extends ActionBarActivity{
                     initialStrength = sighting.getRSSI();
                     isInitialSighting = false;
                 }
-                toggleAlarmSound();
                 if(sighting.getRSSI() > -50){
+                    finishTime = System.currentTimeMillis();
                     toggleAlarm(findViewById(R.id.toggleButton));
                     beaconManager.stopListening();
                 }
@@ -59,6 +60,8 @@ public class AlarmActivity extends ActionBarActivity{
         beaconManager.addListener(beaconSightingListener);
         Log.v("AlarmActivity", "Starting listener");
         beaconManager.startListening();
+        startTime = System.currentTimeMillis();
+        toggleAlarmSound();
     }
 
     protected void onDestroy()
@@ -126,6 +129,13 @@ public class AlarmActivity extends ActionBarActivity{
         if (alarmTone.isPlaying())
             toggleAlarmSound();
 
+        double timeElapsed = finishTime - startTime;
+        double scoreWithoutStrength = 1 / timeElapsed;
+        double score = scoreWithoutStrength * initialStrength * initialStrength * 100;
+        Log.v("InitialStrength", String.valueOf(initialStrength));
+        Log.v("TimeElapsed", String.valueOf(timeElapsed));
+        Log.v("AlarmScore",  String.valueOf(score));
+        Toast.makeText(this, "Your Morning Score: " + String.valueOf(score), Toast.LENGTH_LONG).show();
         Button button = (Button) findViewById(R.id.toggleButton);
         button.setEnabled(false);
 
