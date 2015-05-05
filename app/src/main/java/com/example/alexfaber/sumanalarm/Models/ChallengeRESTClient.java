@@ -81,6 +81,25 @@ public class ChallengeRESTClient extends Application{
         queue.add(req);
     }
 
+    public static void updateAcceptance(String userId, String challengeId, boolean accept, Backend.BackendCallback callback){
+        RequestQueue queue = MyVolley.getRequestQueue();
+        // PUT params to be sent to the server
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("accept", accept);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        JsonObjectRequest req = new JsonObjectRequest(
+                Request.Method.PUT,
+                SERVER_URL + "challenges/" + challengeId + "/accept/" + userId,
+                jsonParams,
+                createMyReqSuccessListener(callback),
+                createMyReqErrorListener(callback)
+        );
+        queue.add(req);
+    }
+
     private static Response.Listener<JSONObject> createMyReqSuccessListener(final Backend.BackendCallback callback){
         return new Response.Listener<JSONObject>() {
             @Override

@@ -7,20 +7,24 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.ApplicationController;
+import com.example.alexfaber.sumanalarm.Models.Backend;
+import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
 import com.example.alexfaber.sumanalarm.Models.Participant;
 import com.example.alexfaber.sumanalarm.Models.User;
 import com.example.alexfaber.sumanalarm.R;
 
 import java.util.ArrayList;
 
-public class ChallengeActivity extends ActionBarActivity {
+public class ChallengeActivity extends ActionBarActivity implements View.OnClickListener{
     private String name, _id, owner, userName, date, loggedInUserId;
     private ArrayList<Participant> participants;
     private Participant[] participantArray;
@@ -55,6 +59,42 @@ public class ChallengeActivity extends ActionBarActivity {
         return hasAccepted;
     }
 
+    private void toggleAcceptOrDenyButton(){
+        //Check to see if the user is one of the participants, and allow display accept or deny
+        acceptDenyButton = (Button) findViewById(R.id.challenge_accept_deny_button);
+        if(userHasAcceptedChallenge(participants)){
+            acceptDenyButton.setText("Deny");
+        }else{
+            acceptDenyButton.setText("Accept");
+        }
+    }
+
+    private void acceptOrDeny(){
+        ChallengeRESTClient.updateAcceptance(loggedInUserId, _id, !userHasAcceptedChallenge(participants), new Backend.BackendCallback() {
+            @Override
+            public void onRequestCompleted(Object result) {
+                //TODO refresh list of participants (maybe)
+                //Toggle the accept or deny button
+                toggleAcceptOrDenyButton();
+            }
+
+            @Override
+            public void onRequestFailed(String errorCode) {
+                switch(errorCode){
+                    case "400":
+                        Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
+                        break;
+                    case "404":
+                        Toast.makeText(self, errorCode + " : No Challenges or userId Found", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +105,7 @@ public class ChallengeActivity extends ActionBarActivity {
         //Grab some userPrefs
         userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
         loggedInUserId = userPrefs.getString("_id", null);
-        if(loggedInUserId == null){
+        if (loggedInUserId == null) {
             Intent loginIntent = new Intent(this, UserLoginActivity.class);
             loginIntent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(loginIntent);
@@ -87,22 +127,20 @@ public class ChallengeActivity extends ActionBarActivity {
         dateTV = (TextView) findViewById(R.id.challenge_date);
         nameTV.setText(name);
         userNameTv.setText("Created By: " + userName);
-        dateTV.setText(date.substring(0,10));
+        dateTV.setText(date.substring(0, 10));
 
         //Update the listView
         participantLV = (ListView) findViewById(R.id.challenge_participants);
-        participantArrayAdapter  = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, buildParticipantArray(participants));
+        participantArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, buildParticipantArray(participants));
         participantLV.setAdapter(participantArrayAdapter);
 
-        //Check to see if the user is one of the participants, and allow display accept or deny
+        //Wire up accept/deny button
         acceptDenyButton = (Button) findViewById(R.id.challenge_accept_deny_button);
-        if(userHasAcceptedChallenge(participants)){
-            acceptDenyButton.setText("Deny");
-        }else{
-            acceptDenyButton.setText("Accept");
-        }
-    }
+        acceptDenyButton.setOnClickListener(this);
 
+        //Set accept or deny appropriately
+        toggleAcceptOrDenyButton();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -146,5 +184,14 @@ public class ChallengeActivity extends ActionBarActivity {
                 return(true);
         }
         return(super.onOptionsItemSelected(item));
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.challenge_accept_deny_button: {
+                acceptOrDeny();
+            }
+        }
     }
 }
