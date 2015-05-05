@@ -21,6 +21,7 @@ import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.Models.Backend;
 import com.example.alexfaber.sumanalarm.Models.Challenge;
 import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
+import com.example.alexfaber.sumanalarm.Models.Participant;
 import com.example.alexfaber.sumanalarm.Models.User;
 import com.example.alexfaber.sumanalarm.R;
 
@@ -37,6 +38,8 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
     private SharedPreferences userPrefs;
     private String userId;
     private SwipeRefreshLayout swipeLayout;
+    private List<Challenge> challenges;
+    private Challenge c;
 
 
     private void updateChallengesListView(){
@@ -51,11 +54,8 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
         ChallengeRESTClient.fetchAll(userId, new Backend.BackendCallback(){
             @Override
             public void onRequestCompleted(Object result) {
-                List<Challenge> challenges = (ArrayList)result;
-                Log.v(TAG, challenges.toString());
-                VolleyLog.v("updateChallengesListView: " + challenges.toString());
+                challenges = (ArrayList)result;
                 String[] simpleChallenges = new String[challenges.size()];
-                Challenge c;
                 for(int i = 0; i < challenges.size(); i++){
                     c = challenges.get(i);
                     simpleChallenges[i] = c.name;
@@ -105,6 +105,15 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //Move to challenge activity
+                Intent intent = new Intent(self, ChallengeActivity.class);
+                Challenge clickedChallenge = challenges.get(position);
+                intent.putParcelableArrayListExtra("participants", clickedChallenge.participants);
+                intent.putExtra("_id",      clickedChallenge._id);
+                intent.putExtra("name",     clickedChallenge.name);
+                intent.putExtra("owner",    clickedChallenge.owner);
+                intent.putExtra("userName", clickedChallenge.userName);
+                intent.putExtra("date",     clickedChallenge.date);
+                startActivity(intent);
             }
         });
 

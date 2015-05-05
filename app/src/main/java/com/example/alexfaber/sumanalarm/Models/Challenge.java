@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Challenge {
     public String _id, owner, userName, name, date;
-    public List<Participant> participants;
+    public ArrayList<Participant> participants;
 
     public Challenge(){
         _id = "";
