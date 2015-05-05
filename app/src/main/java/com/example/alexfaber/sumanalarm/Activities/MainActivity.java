@@ -20,7 +20,11 @@ import com.example.alexfaber.sumanalarm.R;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.gimbal.android.Beacon;
 import com.gimbal.android.Gimbal;
+import com.gimbal.android.BeaconEventListener;
+import com.gimbal.android.BeaconManager;
+import com.gimbal.android.BeaconSighting;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -36,7 +40,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
         confirmButton.setOnClickListener(this);
 
-        //Initialize Gimbal Api
+        //Initialize Gimbal
         Gimbal.setApiKey(this.getApplication(), "1cd769e6-628b-401e-a545-f113ffad4d73");
 
         //Check to see if user is logged in (by checking only their userName... lawlz)

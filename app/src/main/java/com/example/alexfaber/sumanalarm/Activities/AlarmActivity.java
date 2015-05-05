@@ -15,19 +15,50 @@ import android.widget.Toast;
 import com.example.alexfaber.sumanalarm.Alarm;
 import com.example.alexfaber.sumanalarm.R;
 
+import com.gimbal.android.Beacon;
+import com.gimbal.android.BeaconEventListener;
+import com.gimbal.android.BeaconManager;
+import com.gimbal.android.BeaconSighting;
+
 public class AlarmActivity extends ActionBarActivity{
     private Ringtone alarmTone;
+    private int initialStrength;
+    private boolean isInitialSighting;
+    private BeaconManager beaconManager;
+    private BeaconEventListener beaconSightingListener;
+    private Beacon beacon;
+
 
     private static final String TAG = "AlarmActivity";
 
     protected void onCreate(Bundle savedInstanceState) {
+        isInitialSighting = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
         setupAlarmTone();
 
-        // Turn alarm on
-        toggleAlarmSound();
+
+        beaconSightingListener = new BeaconEventListener() {
+            @Override
+            public void onBeaconSighting(BeaconSighting sighting) {
+                Log.v("Gimbal Sighting", sighting.toString());
+                boolean inRange = false;
+                if(isInitialSighting){
+                    initialStrength = sighting.getRSSI();
+                    isInitialSighting = false;
+                }
+                toggleAlarmSound();
+                if(sighting.getRSSI() > -50){
+                    toggleAlarm(findViewById(R.id.toggleButton));
+                    beaconManager.stopListening();
+                }
+            }
+        };
+        beaconManager = new BeaconManager();
+        beaconManager.addListener(beaconSightingListener);
+        Log.v("AlarmActivity", "Starting listener");
+        beaconManager.startListening();
     }
 
     protected void onDestroy()
