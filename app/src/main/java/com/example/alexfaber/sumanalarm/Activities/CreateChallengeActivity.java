@@ -23,11 +23,11 @@ import com.example.alexfaber.sumanalarm.Models.Backend;
 import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
 import com.example.alexfaber.sumanalarm.Models.User;
 import com.example.alexfaber.sumanalarm.R;
-import com.example.alexfaber.sumanalarm.UserNameListViewHelper;
+import com.example.alexfaber.sumanalarm.UsernameListViewHelper;
 
 public class CreateChallengeActivity extends ActionBarActivity implements View.OnClickListener{
     //Instance variables
-    private UserNameListViewHelper userNameListViewHelper;
+    private UsernameListViewHelper userNameListViewHelper;
     private String TAG = "CreateChallengeActivity";
     private ListView userNameListView;
     private ArrayAdapter<String> userNamesAdapter;
@@ -72,7 +72,7 @@ public class CreateChallengeActivity extends ActionBarActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_challenge);
-        this.userNameListViewHelper = new UserNameListViewHelper();
+        this.userNameListViewHelper = new UsernameListViewHelper();
         self = this;
 
         //Wire up submit button

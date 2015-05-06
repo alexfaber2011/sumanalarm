@@ -8,11 +8,11 @@ import java.util.Arrays;
 /**
  * Created by alexfaber on 4/14/15.
  */
-public class UserNameListViewHelper {
+public class UsernameListViewHelper {
     private ArrayList<String> userNames;
     private String TAG = "UserNameListViewHelper";
 
-    public UserNameListViewHelper(){
+    public UsernameListViewHelper(){
         //Constructor, nothing to do here at the moment.
         this.userNames = new ArrayList<String>();
     }
