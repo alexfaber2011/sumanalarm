@@ -11,6 +11,7 @@ public class Participant implements Parcelable {
     public String userName;
     public int score;
     public boolean accepted;
+    //TODO add a alarm time field
 
     public Participant(){
         _id = "";
