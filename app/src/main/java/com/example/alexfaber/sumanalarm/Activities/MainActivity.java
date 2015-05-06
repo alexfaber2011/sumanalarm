@@ -17,6 +17,14 @@ import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.Models.User;
 import com.example.alexfaber.sumanalarm.R;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import com.gimbal.android.Beacon;
+import com.gimbal.android.Gimbal;
+import com.gimbal.android.BeaconEventListener;
+import com.gimbal.android.BeaconManager;
+import com.gimbal.android.BeaconSighting;
 
 public class MainActivity extends ActionBarActivity implements View.OnClickListener{
 
@@ -31,6 +39,9 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
         picker = (TimePicker)findViewById(R.id.picker);
         Button confirmButton = (Button)findViewById(R.id.confirm_alarm);
         confirmButton.setOnClickListener(this);
+
+        //Initialize Gimbal
+        Gimbal.setApiKey(this.getApplication(), "1cd769e6-628b-401e-a545-f113ffad4d73");
 
         //Check to see if user is logged in (by checking only their userName... lawlz)
         SharedPreferences userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);

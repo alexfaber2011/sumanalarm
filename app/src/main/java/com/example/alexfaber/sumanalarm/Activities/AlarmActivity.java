@@ -15,18 +15,52 @@ import android.widget.Toast;
 import com.example.alexfaber.sumanalarm.Alarm;
 import com.example.alexfaber.sumanalarm.R;
 
+import com.gimbal.android.Beacon;
+import com.gimbal.android.BeaconEventListener;
+import com.gimbal.android.BeaconManager;
+import com.gimbal.android.BeaconSighting;
+
 public class AlarmActivity extends ActionBarActivity{
     private Ringtone alarmTone;
+    private int initialStrength;
+    private boolean isInitialSighting;
+    private BeaconManager beaconManager;
+    private BeaconEventListener beaconSightingListener;
+    private long startTime = 0;
+    private long finishTime = 0;
+
 
     private static final String TAG = "AlarmActivity";
 
     protected void onCreate(Bundle savedInstanceState) {
+        isInitialSighting = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
 
         setupAlarmTone();
 
-        // Turn alarm on
+
+        beaconSightingListener = new BeaconEventListener() {
+            @Override
+            public void onBeaconSighting(BeaconSighting sighting) {
+                Log.v("Gimbal Sighting", sighting.toString());
+                boolean inRange = false;
+                if(isInitialSighting){
+                    initialStrength = sighting.getRSSI();
+                    isInitialSighting = false;
+                }
+                if(sighting.getRSSI() > -50){
+                    finishTime = System.currentTimeMillis();
+                    toggleAlarm(findViewById(R.id.toggleButton));
+                    beaconManager.stopListening();
+                }
+            }
+        };
+        beaconManager = new BeaconManager();
+        beaconManager.addListener(beaconSightingListener);
+        Log.v("AlarmActivity", "Starting listener");
+        beaconManager.startListening();
+        startTime = System.currentTimeMillis();
         toggleAlarmSound();
     }
 
@@ -95,6 +129,13 @@ public class AlarmActivity extends ActionBarActivity{
         if (alarmTone.isPlaying())
             toggleAlarmSound();
 
+        double timeElapsed = finishTime - startTime;
+        double scoreWithoutStrength = 1 / timeElapsed;
+        double score = scoreWithoutStrength * initialStrength * initialStrength * 100;
+        Log.v("InitialStrength", String.valueOf(initialStrength));
+        Log.v("TimeElapsed", String.valueOf(timeElapsed));
+        Log.v("AlarmScore",  String.valueOf(score));
+        Toast.makeText(this, "Your Morning Score: " + String.valueOf(score), Toast.LENGTH_LONG).show();
         Button button = (Button) findViewById(R.id.toggleButton);
         button.setEnabled(false);
 
