@@ -41,17 +41,17 @@ public class ChallengeRESTClient extends Application{
 //    private static final String SERVER_URL = "http://10.0.2.2:5000/";
 
 
-    public static void create(String userId, ArrayList<String> userNames, Backend.BackendCallback callback){
+    public static void create(String userId, ArrayList<String> userNames, String challengeName, Backend.BackendCallback callback){
         // Post params to be sent to the server
         JSONObject jsonParams = new JSONObject();
         try {
             jsonParams.put("owner", userId);
             jsonParams.put("userNames", userNames);
+            jsonParams.put("name", challengeName);
         }catch(JSONException e){
             e.printStackTrace();
         }
 
-        Log.v(TAG, "CREATE 2 Called");
         RequestQueue queue = MyVolley.getRequestQueue();
         JsonObjectRequest req = new JsonObjectRequest(
                 Request.Method.POST, SERVER_URL + "challenges/",
@@ -68,14 +68,33 @@ public class ChallengeRESTClient extends Application{
      * @param callback
      */
     public static void fetchAll(String userId, Backend.BackendCallback callback){
-        String getParams = String.format("?owner=%1$s",userId);
+        String getParams = String.format("?participantId=%1$s",userId);
         Log.v(TAG, "fetchAll called");
         RequestQueue queue = MyVolley.getRequestQueue();
         JsonArrayRequest req = new JsonArrayRequest(
                 Request.Method.GET,
-                SERVER_URL + "challenges/" + getParams,
+                SERVER_URL + "challenges/participant" + getParams,
                 null,
                 createMyReqArraySuccessListener(callback),
+                createMyReqErrorListener(callback)
+        );
+        queue.add(req);
+    }
+
+    public static void updateAcceptance(String userId, String challengeId, boolean accept, Backend.BackendCallback callback){
+        RequestQueue queue = MyVolley.getRequestQueue();
+        // PUT params to be sent to the server
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("accept", accept);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        JsonObjectRequest req = new JsonObjectRequest(
+                Request.Method.PUT,
+                SERVER_URL + "challenges/" + challengeId + "/accept/" + userId,
+                jsonParams,
+                createMyReqSuccessListener(callback),
                 createMyReqErrorListener(callback)
         );
         queue.add(req);

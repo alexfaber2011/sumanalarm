@@ -9,7 +9,6 @@
     <string name="title_activity_challenges">Challenges</string>
     <string name="title_activity_create_challenge">Create Challenge</string>
     <string name="snooze">Snooze</string>
-
     <string name="logout">Log Out</string>
 
     <!-- action bar -->
@@ -32,5 +31,8 @@
     <!-- Create Challenge Activity -->
     <string name="add_username">Add</string>
     <string name="title_activity_sign_up">SignUpActivity</string>
+    <string name="challenge_name">Challenge Name</string>
+    <string name="add_username_button">Add User Name to List</string>
+    <string name="title_activity_challenge">ChallengeActivity</string>
 
 </resources>

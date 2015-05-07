@@ -109,6 +109,7 @@ public class MainActivity extends ActionBarActivity implements View.OnClickListe
                 Integer hours = picker.getCurrentHour();
 
                 Alarm.getAlarm().setAlarmAtTime(this, minutes, hours);
+                //TODO wire up database call here
 
                 break;
             }
