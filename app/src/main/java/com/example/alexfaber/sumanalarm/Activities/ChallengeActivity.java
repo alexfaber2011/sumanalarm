@@ -3,8 +3,10 @@ package com.example.alexfaber.sumanalarm.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.nfc.Tag;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,8 +23,21 @@ import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
 import com.example.alexfaber.sumanalarm.Models.Participant;
 import com.example.alexfaber.sumanalarm.Models.User;
 import com.example.alexfaber.sumanalarm.R;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ChallengeActivity extends ActionBarActivity implements View.OnClickListener{
     private String name, _id, owner, userName, date, loggedInUserId;
@@ -63,16 +78,64 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
         //Check to see if the user is one of the participants, and allow display accept or deny
         acceptDenyButton = (Button) findViewById(R.id.challenge_accept_deny_button);
         if(userHasAcceptedChallenge(participants)){
-            acceptDenyButton.setText("Deny");
-        }else{
+            Log.v("","Deny hit");
             acceptDenyButton.setText("Accept");
+            acceptDenyButton.refreshDrawableState();
+        }else{
+            Log.v("","Accept hit");
+            acceptDenyButton.setText("Deny");
+            acceptDenyButton.setText("test");
+            acceptDenyButton.refreshDrawableState();
         }
     }
 
     private void acceptOrDeny(){
+        Log.v("", "userHasAcceptedChallenge: " + !userHasAcceptedChallenge(participants));
         ChallengeRESTClient.updateAcceptance(loggedInUserId, _id, !userHasAcceptedChallenge(participants), new Backend.BackendCallback() {
             @Override
             public void onRequestCompleted(Object result) {
+                Log.v("", loggedInUserId);
+                Log.v("", result.toString());
+                Log.v("", "Result: " + result.toString());
+                Log.v("", "onRequestCompleted");
+
+                JsonElement jelement = new JsonParser().parse(result.toString());
+                JsonObject  jobject = jelement.getAsJsonObject();
+
+                JsonElement participantsElement = jobject.remove("participants");
+                JsonArray jsonArray = participantsElement.getAsJsonArray();
+                Iterator<JsonElement> itr = jsonArray.iterator();
+                ArrayList<Participant> participantList = new ArrayList<Participant>();
+
+                while(itr.hasNext())
+                {
+                    Participant p = new Participant();
+                    JsonElement jsonElement = itr.next();
+                    JsonObject obj = jsonElement.getAsJsonObject();
+                    p._id = obj.get("_id").toString();
+                    p.userName = obj.get("userName").toString();
+                    p.score = Integer.parseInt(obj.get("score").toString());
+                    p.accepted = Boolean.getBoolean(obj.get("accepted").toString());
+                    Log.v("", "" + p.toString());
+                    participantList.add(p);
+                    Log.v("",""+jsonElement.getAsJsonObject().get("_id"));
+                }
+
+                Log.v("", "jsonArray.get(0): " + jsonArray.get(0).getAsJsonObject().get("_id"));
+
+                Log.v("",participantsElement.toString());
+
+                JsonPrimitive id = jobject.getAsJsonPrimitive("_id");
+
+                Log.v("", "id: " + id);
+//                int counter = 0;
+//                while (itr.hasNext()) {
+//                    Log.v("" + counter, itr.next().toString());
+//
+//                    counter++;
+//                }
+
+                Log.v("","element string: " + jelement.toString());
                 //TODO refresh list of participants (maybe)
                 //Toggle the accept or deny button
                 toggleAcceptOrDenyButton();

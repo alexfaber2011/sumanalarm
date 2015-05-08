@@ -35,7 +35,8 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/challenge_accept_deny_button" />
+        android:id="@+id/challenge_accept_deny_button"
+        android:onClick="acceptChallenge"/>
 
 
 </LinearLayout>
