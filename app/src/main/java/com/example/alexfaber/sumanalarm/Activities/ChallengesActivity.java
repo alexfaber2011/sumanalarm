@@ -93,7 +93,6 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
         //Wire up swipe layout
         swipeLayout = (SwipeRefreshLayout)findViewById(R.id.swipe_container);
         swipeLayout.setOnRefreshListener(this);
-        swipeLayout.setColorSchemeColors(android.R.color.holo_green_dark, android.R.color.holo_green_light);
 
         //Wire up create challenge button
         Button confirmButton = (Button)findViewById(R.id.create_challenge);
