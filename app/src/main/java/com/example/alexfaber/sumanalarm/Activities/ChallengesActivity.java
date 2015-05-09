@@ -180,6 +180,14 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
 
     @Override
     public void onRefresh(){
+        super.onResume();
+        swipeLayout.setRefreshing(true);
+        updateChallengesListView();
+    }
+
+    @Override
+    public void onStart(){
+        super.onStart();
         swipeLayout.setRefreshing(true);
         updateChallengesListView();
     }
