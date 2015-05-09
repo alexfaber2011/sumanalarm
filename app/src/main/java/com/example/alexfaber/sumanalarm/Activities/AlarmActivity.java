@@ -1,7 +1,8 @@
 package com.example.alexfaber.sumanalarm.Activities;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -13,9 +14,12 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.Alarm;
+import com.example.alexfaber.sumanalarm.ApplicationController;
+import com.example.alexfaber.sumanalarm.Models.Backend;
+import com.example.alexfaber.sumanalarm.Models.Challenge;
+import com.example.alexfaber.sumanalarm.Models.UserRESTClient;
 import com.example.alexfaber.sumanalarm.R;
 
-import com.gimbal.android.Beacon;
 import com.gimbal.android.BeaconEventListener;
 import com.gimbal.android.BeaconManager;
 import com.gimbal.android.BeaconSighting;
@@ -28,6 +32,9 @@ public class AlarmActivity extends ActionBarActivity{
     private BeaconEventListener beaconSightingListener;
     private long startTime = 0;
     private long finishTime = 0;
+    private SharedPreferences userPrefs;
+    private String userId;
+    private Context self;
 
 
     private static final String TAG = "AlarmActivity";
@@ -38,6 +45,8 @@ public class AlarmActivity extends ActionBarActivity{
         setContentView(R.layout.activity_alarm);
 
         setupAlarmTone();
+
+        self = this;
 
 
         beaconSightingListener = new BeaconEventListener() {
@@ -62,6 +71,15 @@ public class AlarmActivity extends ActionBarActivity{
         beaconManager.startListening();
         startTime = System.currentTimeMillis();
         toggleAlarmSound();
+
+        //Grab user preferences
+        userPrefs = getSharedPreferences(ApplicationController.USER_SHARED_PREFS, Context.MODE_PRIVATE);
+        userId = userPrefs.getString("_id", null);
+        if(userId == null){
+            Intent intent = new Intent(this, UserLoginActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            startActivity(intent);
+        }
     }
 
     protected void onDestroy()
@@ -139,8 +157,36 @@ public class AlarmActivity extends ActionBarActivity{
         Button button = (Button) findViewById(R.id.toggleButton);
         button.setEnabled(false);
 
+        //Update the user's score
+        updateUserScore(score);
+
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         startActivity(mainActivityIntent);
+    }
+
+    private void updateUserScore(double score){
+        UserRESTClient.updateAllScores(userId, score, new Backend.BackendCallback() {
+            @Override
+            public void onRequestCompleted(Object result) {
+                Toast.makeText(self, "Successfully submitted score", Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onRequestFailed(String errorCode) {
+                switch (errorCode) {
+                    //TODO Handle the servers error code when user tries to end a challenge that's not theirs.  (shouldn't happen, but it would be nice)
+                    case "400":
+                        Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
+                        break;
+                    case "404":
+                        Toast.makeText(self,"No Challenges Accepted or Invited To", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        });
     }
 }
 

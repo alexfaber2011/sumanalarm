@@ -9,21 +9,21 @@ import android.os.Parcelable;
 public class Participant implements Parcelable {
     public String _id;
     public String userName;
-    public int score;
+    public double score;
     public boolean accepted;
     //TODO add a alarm time field
 
     public Participant(){
         _id = "";
         userName = "";
-        score = 0;
+        score = 0.0;
         accepted = false;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
 
-        sb.append(("\n\t _id: " + _id));
+//        sb.append(("\n\t _id: " + _id));
         sb.append(("\n\t userName: " + userName));
         sb.append(("\n\t score: " + score));
         sb.append(("\n\t accepted: " + accepted));
@@ -34,7 +34,7 @@ public class Participant implements Parcelable {
     protected Participant(Parcel in) {
         _id = in.readString();
         userName = in.readString();
-        score = in.readInt();
+        score = in.readDouble();
         accepted = in.readByte() != 0x00;
     }
 
@@ -47,7 +47,7 @@ public class Participant implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(_id);
         dest.writeString(userName);
-        dest.writeInt(score);
+        dest.writeDouble(score);
         dest.writeByte((byte) (accepted ? 0x01 : 0x00));
     }
 
