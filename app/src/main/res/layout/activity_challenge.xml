@@ -24,18 +24,23 @@
         android:id="@+id/challenge_date"
         android:paddingLeft="10dp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/challenge_ended"
+        android:paddingLeft="10dp"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/challenge_participants"
         android:layout_weight="0.1">
-
     </ListView>
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/challenge_accept_deny_button" />
+        android:id="@+id/challenge_accept_deny_end_button" />
 
 
 </LinearLayout>

@@ -113,6 +113,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                 intent.putExtra("owner",    clickedChallenge.owner);
                 intent.putExtra("userName", clickedChallenge.userName);
                 intent.putExtra("date",     clickedChallenge.date);
+                intent.putExtra("ended",    clickedChallenge.ended);
                 startActivity(intent);
             }
         });

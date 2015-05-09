@@ -10,13 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.Models.Backend;
+import com.example.alexfaber.sumanalarm.Models.Challenge;
 import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
 import com.example.alexfaber.sumanalarm.Models.Participant;
 import com.example.alexfaber.sumanalarm.Models.User;
@@ -28,12 +28,14 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
     private String name, _id, owner, userName, date, loggedInUserId;
     private ArrayList<Participant> participants;
     private Participant[] participantArray;
-    private TextView nameTV, userNameTv, dateTV;
+    private TextView nameTV, userNameTv, dateTV, endedTv;
     private ListView participantLV;
     private ArrayAdapter participantArrayAdapter;
     private Context self;
-    private Button acceptDenyButton;
+    private Button acceptDenyEndButton;
     private SharedPreferences userPrefs;
+    private boolean userOwnsChallenge, ended;
+    private Challenge updatedChallenge;
 
     /**
      * May not be necessary, but was having sending the array list to the adapter via `toString()`
@@ -61,11 +63,11 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
 
     private void toggleAcceptOrDenyButton(){
         //Check to see if the user is one of the participants, and allow display accept or deny
-        acceptDenyButton = (Button) findViewById(R.id.challenge_accept_deny_button);
+        acceptDenyEndButton = (Button) findViewById(R.id.challenge_accept_deny_end_button);
         if(userHasAcceptedChallenge(participants)){
-            acceptDenyButton.setText("Deny");
+            acceptDenyEndButton.setText("Deny");
         }else{
-            acceptDenyButton.setText("Accept");
+            acceptDenyEndButton.setText("Accept");
         }
     }
 
@@ -81,6 +83,36 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
             @Override
             public void onRequestFailed(String errorCode) {
                 switch(errorCode){
+                    case "400":
+                        Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
+                        break;
+                    case "404":
+                        Toast.makeText(self, errorCode + " : No Challenges or userId Found", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
+                        break;
+                }
+            }
+        });
+    }
+
+    private void endChallenge(){
+        ChallengeRESTClient.endChallenge(loggedInUserId, _id, new Backend.BackendCallback(){
+            @Override
+            public void onRequestCompleted(Object result) {
+                //Toggle the accept or deny button
+                updatedChallenge = (Challenge)result;
+                endedTv.setText((updatedChallenge.ended) ? "Ended" : "Active");
+                if(updatedChallenge.ended){
+                    acceptDenyEndButton.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onRequestFailed(String errorCode) {
+                switch(errorCode){
+                    //TODO Handle the servers error code when user tries to end a challenge that's not theirs.  (shouldn't happen, but it would be nice)
                     case "400":
                         Toast.makeText(self, errorCode + " : Bad Request Made to the Server", Toast.LENGTH_LONG).show();
                         break;
@@ -112,6 +144,8 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
             return;
         }
 
+        userOwnsChallenge = false;
+
         //Populate some stuff from the intent
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
@@ -120,6 +154,7 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
         userName = intent.getStringExtra("userName");
         date = intent.getStringExtra("date");
         participants = intent.getParcelableArrayListExtra("participants");
+        ended = intent.getBooleanExtra("ended", false);
 
         //update text views
         nameTV = (TextView) findViewById(R.id.challenge_name);
@@ -128,18 +163,33 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
         nameTV.setText(name);
         userNameTv.setText("Created By: " + userName);
         dateTV.setText(date.substring(0, 10));
+        endedTv = (TextView) findViewById(R.id.challenge_ended);
+        endedTv.setText((ended) ? "Ended" : "Active");
+
 
         //Update the listView
         participantLV = (ListView) findViewById(R.id.challenge_participants);
         participantArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, buildParticipantArray(participants));
         participantLV.setAdapter(participantArrayAdapter);
 
-        //Wire up accept/deny button
-        acceptDenyButton = (Button) findViewById(R.id.challenge_accept_deny_button);
-        acceptDenyButton.setOnClickListener(this);
+        //Wire up accept/deny/delete button
+        acceptDenyEndButton = (Button) findViewById(R.id.challenge_accept_deny_end_button);
+        acceptDenyEndButton.setOnClickListener(this);
 
-        //Set accept or deny appropriately
-        toggleAcceptOrDenyButton();
+        //Check to see if the user owns this challenge
+        if(userPrefs.getString("_id", null).equals(owner)){
+            //make the button an end button
+            if(ended){
+                acceptDenyEndButton.setVisibility(View.GONE);
+            }else{
+                acceptDenyEndButton = (Button) findViewById(R.id.challenge_accept_deny_end_button);
+                acceptDenyEndButton.setText("END");
+                userOwnsChallenge = true;
+            }
+        }else {
+            //Set accept or deny appropriately
+            toggleAcceptOrDenyButton();
+        }
     }
 
     @Override
@@ -189,8 +239,12 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.challenge_accept_deny_button: {
-                acceptOrDeny();
+            case R.id.challenge_accept_deny_end_button: {
+                if(userOwnsChallenge){
+                    endChallenge();
+                }else {
+                    acceptOrDeny();
+                }
             }
         }
     }
