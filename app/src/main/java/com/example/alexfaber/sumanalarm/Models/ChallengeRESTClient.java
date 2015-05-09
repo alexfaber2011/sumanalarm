@@ -94,7 +94,26 @@ public class ChallengeRESTClient extends Application{
                 Request.Method.PUT,
                 SERVER_URL + "challenges/" + challengeId + "/accept/" + userId,
                 jsonParams,
-                createMyReqSuccessListener(callback),
+                createMyReqSuccessHandler(callback),
+                createMyReqErrorListener(callback)
+        );
+        queue.add(req);
+    }
+
+    public static void endChallenge(String userId, String challengeId, Backend.BackendCallback callback){
+        RequestQueue queue = MyVolley.getRequestQueue();
+        // PUT params to be sent to the server
+        JSONObject jsonParams = new JSONObject();
+        try {
+            jsonParams.put("ended", true);
+        }catch(JSONException e){
+            e.printStackTrace();
+        }
+        JsonObjectRequest req = new JsonObjectRequest(
+                Request.Method.PUT,
+                SERVER_URL + "challenges/" + challengeId,
+                jsonParams,
+                createMyReqSuccessHandler(callback),
                 createMyReqErrorListener(callback)
         );
         queue.add(req);
@@ -106,6 +125,20 @@ public class ChallengeRESTClient extends Application{
             public void onResponse(JSONObject response) {
                 VolleyLog.v(response.toString());
                 callback.onRequestCompleted(response);
+            }
+        };
+    }
+
+    private static Response.Listener<JSONObject> createMyReqSuccessHandler(final Backend.BackendCallback callback){
+        return new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                VolleyLog.v(response.toString());
+                Challenge challenge;
+                String JSONString = response.toString();
+                Gson gson = new GsonBuilder().create();
+                challenge = gson.fromJson(JSONString, Challenge.class);
+                callback.onRequestCompleted(challenge);
             }
         };
     }
