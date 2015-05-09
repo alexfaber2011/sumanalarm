@@ -94,7 +94,7 @@ public class ChallengeRESTClient extends Application{
                 Request.Method.PUT,
                 SERVER_URL + "challenges/" + challengeId + "/accept/" + userId,
                 jsonParams,
-                createMyReqSuccessListener(callback),
+                createMyReqSuccessHandler(callback),
                 createMyReqErrorListener(callback)
         );
         queue.add(req);

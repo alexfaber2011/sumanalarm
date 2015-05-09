@@ -75,7 +75,12 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
         ChallengeRESTClient.updateAcceptance(loggedInUserId, _id, !userHasAcceptedChallenge(participants), new Backend.BackendCallback() {
             @Override
             public void onRequestCompleted(Object result) {
-                //TODO refresh list of participants (maybe)
+                updatedChallenge = (Challenge)result;
+                //Update the listView
+                participantLV = (ListView) findViewById(R.id.challenge_participants);
+                participants = updatedChallenge.participants;
+                participantArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, buildParticipantArray(participants));
+                participantLV.setAdapter(participantArrayAdapter);
                 //Toggle the accept or deny button
                 toggleAcceptOrDenyButton();
             }
