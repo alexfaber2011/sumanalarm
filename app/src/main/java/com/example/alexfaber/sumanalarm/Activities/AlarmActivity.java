@@ -30,6 +30,7 @@ public class AlarmActivity extends ActionBarActivity{
     private Ringtone alarmTone;
     private int initialStrength;
     private boolean isInitialSighting;
+    private boolean foundBeacon = false;
     private BeaconManager beaconManager;
     private BeaconEventListener beaconSightingListener;
     private long startTime = 0;
@@ -63,15 +64,15 @@ public class AlarmActivity extends ActionBarActivity{
             @Override
             public void onBeaconSighting(BeaconSighting sighting) {
                 Log.v("Gimbal Sighting", sighting.toString());
-                boolean inRange = false;
+                foundBeacon = true;
                 if(isInitialSighting){
+                    Toast.makeText(self, "Gimbal Beacon Found", Toast.LENGTH_SHORT).show();
                     initialStrength = sighting.getRSSI();
                     isInitialSighting = false;
                 }
-                if(sighting.getRSSI() > -50){
+                if(sighting.getRSSI() > -60){
                     finishTime = System.currentTimeMillis();
                     toggleAlarm(findViewById(R.id.toggleButton));
-                    beaconManager.stopListening();
                 }
             }
         };
@@ -123,6 +124,10 @@ public class AlarmActivity extends ActionBarActivity{
 
     public void setSnooze(View view)
     {
+        Log.v("AlarmActivity", "setSnooze() called at: " + System.currentTimeMillis());
+
+        beaconManager.stopListening();
+
         if (alarmTone.isPlaying())
             toggleAlarmSound();
 
@@ -156,14 +161,23 @@ public class AlarmActivity extends ActionBarActivity{
     public void toggleAlarm(View view)
     {
         Alarm.getAlarm().turnedOff();
+        beaconManager.stopListening();
         if (alarmTone.isPlaying())
             toggleAlarmSound();
 
-        double timeElapsed = finishTime - startTime;
-        double scoreWithoutStrength = 1 / timeElapsed;
-        double score = scoreWithoutStrength * initialStrength * initialStrength * 100;
-        Log.v("InitialStrength", String.valueOf(initialStrength));
-        Log.v("TimeElapsed", String.valueOf(timeElapsed));
+        double score = 1;
+        if(finishTime > 0){
+            //only set score if turned off by beacon
+            double timeElapsed = finishTime - startTime;
+            double scoreWithoutStrength = 1 / timeElapsed;
+            score = scoreWithoutStrength * initialStrength * initialStrength * 100;
+        } else if (!foundBeacon){
+            //if beacon is not found tell the user and skip the score update
+            Toast.makeText(this, "No beacon found. Score not calculated.", Toast.LENGTH_LONG).show();
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+            startActivity(mainActivityIntent);
+            return;
+        }
         Log.v("AlarmScore",  String.valueOf(score));
         Toast.makeText(this, "Your Morning Score: " + String.valueOf(score), Toast.LENGTH_LONG).show();
         Button button = (Button) findViewById(R.id.toggleButton);
