@@ -24,38 +24,21 @@
             android:onClick="toggleAlarm"
             android:clickable="true" />
 
-        <Button
-            android:layout_width="wrap_content"
+        <Spinner
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:text="Snooze 5 Minutes"
-            android:id="@+id/snooze5minutes"
-            android:layout_gravity="left|center"
-            android:onClick="setSnooze" />
+            android:id="@+id/spinner"
+            android:layout_gravity="center"
+            android:spinnerMode="dropdown"
+            android:layout_marginBottom="60dp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Snooze 10 Minutes"
-            android:id="@+id/snooze10minutes"
-            android:layout_gravity="center|right"
-            android:onClick="setSnooze" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Snooze 30 Minutes"
-            android:id="@+id/snooze30minutes"
-            android:layout_gravity="left|center_vertical"
+            android:text="Snooze"
+            android:id="@+id/snoozeButton"
+            android:layout_gravity="center"
             android:onClick="setSnooze"
-            android:layout_marginTop="60dp" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Snooze 60 Minutes"
-            android:id="@+id/snooze60minutes"
-            android:layout_gravity="right|center_vertical"
-            android:onClick="setSnooze"
-            android:layout_marginTop="60dp" />
+            android:layout_marginTop="10dp" />
     </FrameLayout>
 </RelativeLayout>

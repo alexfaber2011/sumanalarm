@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.alexfaber.sumanalarm.Alarm;
@@ -49,6 +51,14 @@ public class AlarmActivity extends ActionBarActivity{
 
         self = this;
 
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.snooze_time, android.R.layout.simple_spinner_item);
+        // Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        // Apply the adapter to the spinner
+        spinner.setAdapter(adapter);
 
         beaconSightingListener = new BeaconEventListener() {
             @Override
@@ -117,27 +127,32 @@ public class AlarmActivity extends ActionBarActivity{
         Log.v("AlarmActivity", "setSnooze() called at: " + System.currentTimeMillis());
 
         beaconManager.stopListening();
+
         if (alarmTone.isPlaying())
             toggleAlarmSound();
 
         long time = 0;
-        if (view.getId() == R.id.snooze5minutes)
+
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        Object obj = spinner.getSelectedItem();
+
+        if (obj.toString().equals("5 Minutes"))
         {
             time = 5 * Alarm.getAlarm().MINUTE;
         }
-        else if (view.getId() == R.id.snooze10minutes)
+        else if (obj.toString().equals("15 Minutes"))
         {
-            time = 10 * Alarm.getAlarm().MINUTE;
+            time = 15 * Alarm.getAlarm().MINUTE;
         }
-        else if (view.getId() == R.id.snooze30minutes)
+        else if (obj.toString().equals("30 Minutes"))
         {
             time = 30 * Alarm.getAlarm().MINUTE;
         }
-        else if (view.getId() == R.id.snooze60minutes)
+        else if (obj.toString().equals("1 Hour"))
         {
             time = 60 * Alarm.getAlarm().MINUTE;
         }
-        Log.v("AlarmActivity", "button id: " + view.getId());
+        Log.v("SnoozeWait", String.valueOf(time));
         Intent mainActivityIntent = new Intent(this, MainActivity.class);
         Alarm.getAlarm().setSnooze(this, time);
         startActivity(mainActivityIntent);
