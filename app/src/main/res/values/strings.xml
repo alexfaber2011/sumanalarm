@@ -34,5 +34,7 @@
     <string name="challenge_name">Challenge Name</string>
     <string name="add_username_button">Add User Name to List</string>
     <string name="title_activity_challenge">ChallengeActivity</string>
+    <string name="toggle_alarm_on">Stop Alarm</string>
+    <string name="toggle_alarm_off">Stopped</string>
 
 </resources>
