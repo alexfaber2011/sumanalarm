@@ -62,7 +62,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                     simpleChallenges[i] = c.name;
                 }
 //                challengesArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, simpleChallenges);
-                challengesArrayAdapter = new ChallengesListViewAdapter(self, challenges);
+                challengesArrayAdapter = new ChallengesListViewAdapter(self, userId, challenges);
                 challengesListView.setAdapter(challengesArrayAdapter);
                 Log.v(TAG, simpleChallenges.toString());
                 swipeLayout.setRefreshing(false);
