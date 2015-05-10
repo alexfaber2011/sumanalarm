@@ -35,4 +35,11 @@
     <string name="add_username_button">Add User Name to List</string>
     <string name="title_activity_challenge">ChallengeActivity</string>
 
+    <string-array name="snooze_time">
+        <item id="snooze_time_5_minutes">5 Minutes</item>
+        <item id="snooze_time_15_minutes">15 Minutes</item>
+        <item id="snooze_time_30_minutes">30 Minutes</item>
+        <item id="snooze_time_1_hour">1 Hour</item>
+    </string-array>
+
 </resources>
