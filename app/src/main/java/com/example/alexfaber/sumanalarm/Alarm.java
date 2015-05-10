@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 
 // This class a singleton so only one alarm can be set
@@ -21,9 +22,19 @@ public class Alarm {
     public final long SECOND = 1000;
     boolean alarmSet;
 
+    private long setAlarmTime;
+
     public static Alarm getAlarm()
     {
         return alarmSingleton;
+    }
+
+    public String getSetAlarmTimePrettyPrinted()
+    {
+        if (isAlarmSet())
+            return getAlarm().getAlarmDateTimePrettyPrinted(setAlarmTime);
+        else
+            return "";
     }
 
     public void setAlarmAtTime(Activity sendingActivity, Integer minutes, Integer hours)
@@ -62,6 +73,7 @@ public class Alarm {
         long snoozeAlarmTime = System.currentTimeMillis() + snoozeTime;
 
         setAlarm(sendingActivity, snoozeAlarmTime);
+        setAlarmTime = snoozeAlarmTime;
 
         String timePhrase = "";
         if (snoozeTime / MINUTE < 60)
@@ -84,6 +96,7 @@ public class Alarm {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(sendingActivity, 1, intent, 0);
         AlarmManager alarmManager = (AlarmManager) sendingActivity.getSystemService(sendingActivity.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
+        setAlarmTime = alarmTime;
     }
 
     private boolean isAlarmSet()
@@ -100,6 +113,23 @@ public class Alarm {
         GregorianCalendar today = new GregorianCalendar(year, month, day);
 
         return today.getTimeInMillis() + (HOUR * hours) + (MINUTE * minutes);
+    }
+
+    private String getAlarmDateTimePrettyPrinted(long alarmTime)
+    {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(alarmTime);
+        int hour = calendar.get(Calendar.HOUR);
+        hour = hour > 12 ? hour - 12 : hour;
+        int minute = calendar.get(Calendar.MINUTE);
+        int isAm = calendar.get(Calendar.AM_PM);
+
+        Log.v("","" + calendar.toString());
+
+        String dayOfWeekName = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US);
+        String am_pm = isAm == 0 ? "AM" : "PM";
+
+        return String.format("%s %d:%d %s",dayOfWeekName, hour, minute, am_pm);
     }
 
     private boolean inTheFuture(int alarmHour, int alarmMinute)

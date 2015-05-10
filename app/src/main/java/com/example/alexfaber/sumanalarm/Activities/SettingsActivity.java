@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.alexfaber.sumanalarm.Alarm;
 import com.example.alexfaber.sumanalarm.ApplicationController;
 import com.example.alexfaber.sumanalarm.Models.Backend;
 import com.example.alexfaber.sumanalarm.Models.User;
@@ -27,6 +28,7 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
     private String userName, userId;
     private int maxSnoozes;
     private EditText userNameET, maxSnoozesEt;
+    private TextView alarmTimeSet;
 
     public void saveSettings(){
         //Check to see if they've actually supplied a username
@@ -83,13 +85,24 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
             return;
         }
 
+        String alarmTimeDisplay = Alarm.getAlarm().getSetAlarmTimePrettyPrinted();
+
         //Update the editText box with number of snoozes and id
         userNameET = (EditText)findViewById(R.id.settings_user_name);
         maxSnoozesEt = (EditText)findViewById(R.id.settings_max_snoozes);
+        alarmTimeSet = (TextView)findViewById(R.id.alarmTimeSet);
         userNameET.setText(userName, TextView.BufferType.EDITABLE);
         maxSnoozesEt.setText(Integer.toString(maxSnoozes), TextView.BufferType.EDITABLE);
+        alarmTimeSet.setText(alarmTimeDisplay);
     }
 
+    @Override
+    protected void onResume() {
+        String alarmTimeDisplay = Alarm.getAlarm().getSetAlarmTimePrettyPrinted();
+        alarmTimeSet.setText(alarmTimeDisplay, TextView.BufferType.SPANNABLE);
+
+        super.onResume();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
