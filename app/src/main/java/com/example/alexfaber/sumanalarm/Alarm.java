@@ -15,6 +15,8 @@ import java.util.Locale;
 // This class a singleton so only one alarm can be set
 public class Alarm {
     private static Alarm alarmSingleton = new Alarm();
+    private static PendingIntent pendingIntentSingleton = null;
+    private static Activity sendingActivitySingleton = null;
 
     public final long DAY = 86400000;
     public final long HOUR = 3600000;
@@ -83,14 +85,22 @@ public class Alarm {
 
     public void turnOff()
     {
-        alarmSet = false;
-        setAlarmTime = 0;
+        if (pendingIntentSingleton != null && sendingActivitySingleton != null) {
+            alarmSet = false;
+            setAlarmTime = 0;
+            AlarmManager alarmManager = (AlarmManager) sendingActivitySingleton.getSystemService(sendingActivitySingleton.ALARM_SERVICE);
+            alarmManager.cancel(pendingIntentSingleton);
+            sendingActivitySingleton = null;
+            pendingIntentSingleton = null;
+        }
     }
 
     private void setAlarm(Activity sendingActivity, long alarmTime)
     {
         Intent intent = new Intent(sendingActivity, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(sendingActivity, 1, intent, 0);
+        pendingIntentSingleton = pendingIntent;
+        sendingActivitySingleton = sendingActivity;
         AlarmManager alarmManager = (AlarmManager) sendingActivity.getSystemService(sendingActivity.ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, alarmTime, pendingIntent);
         setAlarmTime = alarmTime;
