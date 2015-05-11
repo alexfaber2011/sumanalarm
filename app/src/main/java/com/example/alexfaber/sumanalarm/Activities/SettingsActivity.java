@@ -164,6 +164,6 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
         Alarm.getAlarm().turnOff();
 
         alarmTimeSet = (TextView)findViewById(R.id.alarmTimeSet);
-        alarmTimeSet.setText("None", TextView.BufferType.SPANNABLE);
+        alarmTimeSet.setText("", TextView.BufferType.SPANNABLE);
     }
 }
