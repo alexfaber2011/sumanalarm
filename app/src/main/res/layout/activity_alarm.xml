@@ -15,14 +15,14 @@
         <ToggleButton
             android:layout_width="123dp"
             android:layout_height="63dp"
-            android:text="New ToggleButton"
+            android:textOn="@string/toggle_alarm_on"
+            android:textOff="@string/toggle_alarm_off"
             android:id="@+id/toggleButton"
             android:layout_gravity="center_horizontal|top"
             android:enabled="true"
             android:checked="true"
             android:onClick="toggleAlarm"
-            android:clickable="true"
-            android:transitionName="ON" />
+            android:clickable="true" />
 
         <Spinner
             android:layout_width="150dp"

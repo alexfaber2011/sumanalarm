@@ -34,6 +34,8 @@
     <string name="challenge_name">Challenge Name</string>
     <string name="add_username_button">Add User Name to List</string>
     <string name="title_activity_challenge">ChallengeActivity</string>
+    <string name="toggle_alarm_on">Stop Alarm</string>
+    <string name="toggle_alarm_off">Stopped</string>
 
     <string-array name="snooze_time">
         <item id="snooze_time_5_minutes">5 Minutes</item>
