@@ -72,6 +72,7 @@ public class Alarm {
 
         setAlarm(sendingActivity, snoozeAlarmTime);
         setAlarmTime = snoozeAlarmTime;
+        alarmSet = true;
 
         String timePhrase = "";
         if (snoozeTime / MINUTE < 60)
