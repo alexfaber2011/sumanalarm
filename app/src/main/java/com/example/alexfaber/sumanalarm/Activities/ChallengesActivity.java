@@ -82,6 +82,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                         Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
                         break;
                 }
+                challenges = new ArrayList<Challenge>();
             }
         });
     }
