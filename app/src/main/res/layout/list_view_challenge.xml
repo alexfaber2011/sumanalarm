@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/challenge_status_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/ic_action_alarms"
+        android:padding="15dp" />
+
+    <TextView
+        android:id="@+id/challenge_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@id/challenge_status_image"
+        android:text="Challenge Name"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/challenge_owner_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/challenge_name_text"
+        android:layout_alignLeft="@id/challenge_name_text"
+        android:text="Owner Name"/>
+
+    <TextView
+        android:id="@+id/challenge_date_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/challenge_owner_text"
+        android:layout_alignLeft="@id/challenge_name_text"
+        android:text="Date"/>
+
+</RelativeLayout>

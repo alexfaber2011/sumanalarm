@@ -20,6 +20,7 @@ import com.example.alexfaber.sumanalarm.Models.Challenge;
 import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
 import com.example.alexfaber.sumanalarm.Models.Participant;
 import com.example.alexfaber.sumanalarm.Models.User;
+import com.example.alexfaber.sumanalarm.ParticipantListViewAdapter;
 import com.example.alexfaber.sumanalarm.R;
 
 import java.util.ArrayList;
@@ -79,7 +80,7 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
                 //Update the listView
                 participantLV = (ListView) findViewById(R.id.challenge_participants);
                 participants = updatedChallenge.participants;
-                participantArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, buildParticipantArray(participants));
+                participantArrayAdapter = new ParticipantListViewAdapter(self, participants);
                 participantLV.setAdapter(participantArrayAdapter);
                 //Toggle the accept or deny button
                 toggleAcceptOrDenyButton();
@@ -174,7 +175,7 @@ public class ChallengeActivity extends ActionBarActivity implements View.OnClick
 
         //Update the listView
         participantLV = (ListView) findViewById(R.id.challenge_participants);
-        participantArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, buildParticipantArray(participants));
+        participantArrayAdapter = new ParticipantListViewAdapter(self, participants);
         participantLV.setAdapter(participantArrayAdapter);
 
         //Wire up accept/deny/delete button

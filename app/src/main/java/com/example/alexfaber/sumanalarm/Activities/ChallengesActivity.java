@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyLog;
 import com.example.alexfaber.sumanalarm.ApplicationController;
+import com.example.alexfaber.sumanalarm.ChallengesListViewAdapter;
 import com.example.alexfaber.sumanalarm.Models.Backend;
 import com.example.alexfaber.sumanalarm.Models.Challenge;
 import com.example.alexfaber.sumanalarm.Models.ChallengeRESTClient;
@@ -32,13 +33,13 @@ import java.util.List;
 public class ChallengesActivity extends ActionBarActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private ListView challengesListView;
-    private ArrayAdapter<String> challengesArrayAdapter;
+    private ArrayAdapter<Challenge> challengesArrayAdapter;
     private Context self;
     private final String TAG = "ChallengesActivity";
     private SharedPreferences userPrefs;
     private String userId;
     private SwipeRefreshLayout swipeLayout;
-    private List<Challenge> challenges;
+    private ArrayList<Challenge> challenges;
     private Challenge c;
 
 
@@ -60,7 +61,8 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                     c = challenges.get(i);
                     simpleChallenges[i] = c.name;
                 }
-                challengesArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, simpleChallenges);
+//                challengesArrayAdapter = new ArrayAdapter<>(self, android.R.layout.simple_list_item_1, simpleChallenges);
+                challengesArrayAdapter = new ChallengesListViewAdapter(self, userId, challenges);
                 challengesListView.setAdapter(challengesArrayAdapter);
                 Log.v(TAG, simpleChallenges.toString());
                 swipeLayout.setRefreshing(false);
@@ -80,6 +82,7 @@ public class ChallengesActivity extends ActionBarActivity implements View.OnClic
                         Toast.makeText(self, errorCode + " Error", Toast.LENGTH_LONG).show();
                         break;
                 }
+                challenges = new ArrayList<Challenge>();
             }
         });
     }
