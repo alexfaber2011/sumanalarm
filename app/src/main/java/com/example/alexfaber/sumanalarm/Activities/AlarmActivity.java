@@ -127,7 +127,7 @@ public class AlarmActivity extends ActionBarActivity{
         int remSnoozes = userPrefs.getInt("remainingSnoozes", 0);
         if(remSnoozes == 0){
             Log.v("AlarmActivity", "No snoozes remaining");
-            Toast.makeText(this, "No snoozes remaining", Toast.LENGTH_SHORT);
+            Toast.makeText(self, "No snoozes remaining", Toast.LENGTH_SHORT).show();
         } else {
             userPrefs.edit().putInt("remainingSnoozes", remSnoozes - 1).commit();
             beaconManager.stopListening();
