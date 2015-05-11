@@ -30,6 +30,15 @@
         android:id="@+id/challenge_ended"
         android:paddingLeft="10dp"/>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/participants_label"
+        android:text="@string/participants"
+        style="@style/Base.TextAppearance.AppCompat.Subhead"
+        android:paddingLeft="10dp"
+        android:paddingTop="10dp"/>
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
