@@ -35,6 +35,7 @@ public class AlarmActivity extends ActionBarActivity{
     private BeaconEventListener beaconSightingListener;
     private long startTime = 0;
     private long finishTime = 0;
+    private int remainingSnoozes;
     private SharedPreferences userPrefs;
     private String userId;
     private Context self;
@@ -46,7 +47,6 @@ public class AlarmActivity extends ActionBarActivity{
         isInitialSighting = true;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm);
-
         setupAlarmTone();
 
         self = this;
@@ -69,8 +69,7 @@ public class AlarmActivity extends ActionBarActivity{
                     Toast.makeText(self, "Gimbal Beacon Found", Toast.LENGTH_SHORT).show();
                     initialStrength = sighting.getRSSI();
                     isInitialSighting = false;
-                }
-                if(sighting.getRSSI() > -60){
+                } else if(sighting.getRSSI() >= -55){
                     finishTime = System.currentTimeMillis();
                     toggleAlarm(findViewById(R.id.toggleButton));
                 }
@@ -125,37 +124,43 @@ public class AlarmActivity extends ActionBarActivity{
     public void setSnooze(View view)
     {
         Log.v("AlarmActivity", "setSnooze() called at: " + System.currentTimeMillis());
+        int remSnoozes = userPrefs.getInt("remainingSnoozes", 0);
+        if(remSnoozes == 0){
+            Log.v("AlarmActivity", "No snoozes remaining");
+            Toast.makeText(this, "No snoozes remaining", Toast.LENGTH_SHORT);
+        } else {
+            userPrefs.edit().putInt("remainingSnoozes", remSnoozes - 1).commit();
+            beaconManager.stopListening();
 
-        beaconManager.stopListening();
+            if (alarmTone.isPlaying())
+                toggleAlarmSound();
 
-        if (alarmTone.isPlaying())
-            toggleAlarmSound();
+            long time = 0;
 
-        long time = 0;
+            Spinner spinner = (Spinner) findViewById(R.id.spinner);
+            Object obj = spinner.getSelectedItem();
 
-        Spinner spinner = (Spinner) findViewById(R.id.spinner);
-        Object obj = spinner.getSelectedItem();
-
-        if (obj.toString().equals("5 Minutes"))
-        {
-            time = 5 * Alarm.getAlarm().MINUTE;
+            if (obj.toString().equals("5 Minutes"))
+            {
+                time = 5 * Alarm.getAlarm().MINUTE;
+            }
+            else if (obj.toString().equals("15 Minutes"))
+            {
+                time = 15 * Alarm.getAlarm().MINUTE;
+            }
+            else if (obj.toString().equals("30 Minutes"))
+            {
+                time = 30 * Alarm.getAlarm().MINUTE;
+            }
+            else if (obj.toString().equals("1 Hour"))
+            {
+                time = 60 * Alarm.getAlarm().MINUTE;
+            }
+            Log.v("SnoozeWait", String.valueOf(time));
+            Intent mainActivityIntent = new Intent(this, MainActivity.class);
+            Alarm.getAlarm().setSnooze(this, time);
+            startActivity(mainActivityIntent);
         }
-        else if (obj.toString().equals("15 Minutes"))
-        {
-            time = 15 * Alarm.getAlarm().MINUTE;
-        }
-        else if (obj.toString().equals("30 Minutes"))
-        {
-            time = 30 * Alarm.getAlarm().MINUTE;
-        }
-        else if (obj.toString().equals("1 Hour"))
-        {
-            time = 60 * Alarm.getAlarm().MINUTE;
-        }
-        Log.v("SnoozeWait", String.valueOf(time));
-        Intent mainActivityIntent = new Intent(this, MainActivity.class);
-        Alarm.getAlarm().setSnooze(this, time);
-        startActivity(mainActivityIntent);
     }
 
     public void toggleAlarm(View view)
@@ -164,6 +169,10 @@ public class AlarmActivity extends ActionBarActivity{
         beaconManager.stopListening();
         if (alarmTone.isPlaying())
             toggleAlarmSound();
+
+        int snoozes = userPrefs.getInt("snoozes", 0);
+        Log.v("Snoozes", String.valueOf(snoozes));
+        userPrefs.edit().putInt("remainingSnoozes", snoozes).commit();
 
         double score = 1;
         if(finishTime > 0){

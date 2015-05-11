@@ -35,6 +35,7 @@ public class User {
         editor.putString("lastName", lastName);
         editor.putString("password", password);
         editor.putInt("snoozes", snoozes);
+        editor.putInt("remainingSnoozes", snoozes);
         editor.putString("_id", _id);
         editor.commit();
     }
