@@ -46,14 +46,10 @@ public class Alarm {
             return;
         }
 
-        if (!inTheFuture(hours, minutes))
-        {
-            Toast.makeText(sendingActivity, "Alarm is set to a time in the past, please pick a time in the future.",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
         long alarmTime = getAlarmTimeInMilliseconds(hours, minutes);
+
+        if (!inTheFuture(hours, minutes))
+            alarmTime += DAY * 1;
 
         setAlarm(sendingActivity, alarmTime);
 
@@ -85,9 +81,10 @@ public class Alarm {
                 Toast.LENGTH_SHORT).show();
     }
 
-    public void turnedOff()
+    public void turnOff()
     {
         alarmSet = false;
+        setAlarmTime = 0;
     }
 
     private void setAlarm(Activity sendingActivity, long alarmTime)
@@ -117,6 +114,8 @@ public class Alarm {
 
     private String getAlarmDateTimePrettyPrinted(long alarmTime)
     {
+        if (alarmTime == 0)
+            return "None";
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(alarmTime);
         int hour = calendar.get(Calendar.HOUR);
