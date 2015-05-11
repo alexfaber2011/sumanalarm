@@ -158,4 +158,12 @@ public class SettingsActivity extends ActionBarActivity implements View.OnClickL
             }
         }
     }
+
+    public void clearAlarm(View view)
+    {
+        Alarm.getAlarm().turnOff();
+
+        alarmTimeSet = (TextView)findViewById(R.id.alarmTimeSet);
+        alarmTimeSet.setText("None", TextView.BufferType.SPANNABLE);
+    }
 }

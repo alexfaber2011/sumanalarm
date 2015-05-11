@@ -160,7 +160,7 @@ public class AlarmActivity extends ActionBarActivity{
 
     public void toggleAlarm(View view)
     {
-        Alarm.getAlarm().turnedOff();
+        Alarm.getAlarm().turnOff();
         beaconManager.stopListening();
         if (alarmTone.isPlaying())
             toggleAlarmSound();
